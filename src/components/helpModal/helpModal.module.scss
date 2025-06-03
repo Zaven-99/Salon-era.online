@@ -1,0 +1,74 @@
+@import '../styles/variables.scss';
+
+
+.help{
+    background: #f6f6f6;
+    border-radius: $br-8;
+    border:$br-1 transparent;
+    padding: $sp-20;
+    max-width: $wd-300;
+    width: $wd-100p;
+    z-index: 25;
+    position: absolute;
+    top: -140px;
+    right: 0px;
+    animation:bounce-in .5s;
+    box-shadow:$shadow-small;
+    
+}
+@keyframes bounce-in {
+    0%{
+        opacity: 0;
+        transform: translateY(100px);
+    }
+    100% {
+       opacity: 1;
+       transform: translateY(0);
+    }
+}
+.help h2{
+    font-size: $fz-12;
+    font-weight:$font-weight-extraBold;
+    text-align: start;
+
+}
+.help-item{
+    font-size: $fz-10;
+    text-align: start;
+}
+
+@media(max-width:540px){
+    .help-description h2{
+        font-size: $fz-12 !important;
+    }
+    .help-description li{
+        font-size: $fz-10 !important;
+    }
+    .help{
+        top: -$sp-150;
+    }
+}
+@media(max-width:362px){
+     
+    .help{
+        top: -$sp-164;
+    }
+}
+@media(max-width:320px){
+     
+    .help{
+        top: -$sp-178;
+    }
+}
+@media(max-width:309px){
+     
+    .help{
+        top: -$sp-196;
+    }
+}
+@media(max-width:281px){
+     
+    .help{
+        top: -$sp-213;
+    }
+}

@@ -1,0 +1,24 @@
+@import '../../../components/styles/variables.scss';
+
+
+.preview-block{
+    display: flex;
+    align-items:center;
+    justify-content: space-between;
+}
+.r-btn{
+    color: black;
+    font-family: "Open Sans", sans-serif;
+    font-size: 12px;
+    font-weight: 400;
+    padding: 10px;
+    height: 50px;
+    background-color: #fe5440;
+    border-radius: 4px;
+    width: 150px;
+}
+.r-btn:hover{
+    transform: scale(1.02);
+	box-shadow: $shadow-small;
+	transition: .2s;
+}

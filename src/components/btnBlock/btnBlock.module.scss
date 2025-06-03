@@ -1,0 +1,15 @@
+@import '../styles/variables.scss';
+
+
+.child{
+	font-weight: 600;
+	font-family: $font;
+}
+
+@media(max-width:900px){
+   
+   .child{
+	font-size: 10px;
+}
+
+}
