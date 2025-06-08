@@ -2,10 +2,10 @@ import { useMemo, useCallback, useState } from "react";
 import { useDispatch } from "react-redux"; // Импортируем useDispatch для отправки экшенов
 import { removeOrder } from "../../../store/slices/orderSlice";
 export const OrderItemState = ({
-  filteredOrders,
+  // filteredOrders,
   setOrders,
   setError,
-  formatDate,
+  // formatDate,
 }) => {
   const dispatch = useDispatch();
   const [editingPriceId, setEditingPriceId] = useState(null);
@@ -141,30 +141,30 @@ export const OrderItemState = ({
     [updateOrderStatus, dispatch]
   );
 
-  const groupOrdersByDate = useCallback(
-    (orders) =>
-      orders.reduce((acc, order) => {
-        if (order.record?.status !== 400 && order.record?.status !== 500) {
-          const date = formatDate(order.record?.dateRecord).split(",")[0];
-          if (!acc[date]) acc[date] = [];
-          acc[date].push(order);
-        }
-        return acc;
-      }, {}),
-    [formatDate]
-  );
+  // const groupOrdersByDate = useCallback(
+  //   (orders) =>
+  //     orders.reduce((acc, order) => {
+  //       if (order.record?.status !== 400 && order.record?.status !== 500) {
+  //         const date = formatDate(order.record?.date_record).split(",")[0];
+  //         if (!acc[date]) acc[date] = [];
+  //         acc[date].push(order);
+  //       }
+  //       return acc;
+  //     }, {}),
+  //   [formatDate]
+  // );
 
-  const groupedOrders = useMemo(
-    () => groupOrdersByDate(filteredOrders),
-    [filteredOrders, groupOrdersByDate]
-  );
+  // const groupedOrders = useMemo(
+  //   () => groupOrdersByDate(filteredOrders),
+  //   [filteredOrders, groupOrdersByDate]
+  // );
 
   return {
     durationToText,
     acceptOrder,
     closeOrder,
     cancelOrder,
-    groupedOrders,
+    // groupedOrders,
     editingPriceId,
     setEditingPriceId,
     newPrice,
@@ -173,6 +173,3 @@ export const OrderItemState = ({
     loading,
   };
 };
-
-
- 

@@ -1,47 +1,3 @@
-// import { createSlice } from "@reduxjs/toolkit";
-
-// const savedOrders = localStorage.getItem("orders");
-// const savedOrderNumber = localStorage.getItem("orderNumber");
-
-// const initialState = {
-//   orders: savedOrders ? JSON.parse(savedOrders) : [],
-//   orderNumber: savedOrderNumber ? parseInt(savedOrderNumber) : 1,
-// };
-
-// const orderSlice = createSlice({
-//   name: "order",
-//   initialState,
-//   reducers: {
-//     saveOrder: (state, action) => {
-//       const newOrder = {
-//         ...action.payload,
-//         number: state.orderNumber, // текущий номер
-//       };
-
-//       state.orders.push(newOrder);
-//       state.orderNumber += 1;
-
-//       localStorage.setItem("orders", JSON.stringify(state.orders));
-//       localStorage.setItem("orderNumber", state.orderNumber);
-//     },
-//     clearOrders: (state) => {
-//       state.orders = [];
-//       state.orderNumber = 1;
-//       localStorage.removeItem("orders");
-//       localStorage.removeItem("orderNumber");
-//     },
-//     removeOrder: (state, action) => {
-//       state.orders = state.orders.filter(
-//         (order) => order.record.id !== action.payload
-//       );
-//       localStorage.setItem("orders", JSON.stringify(state.orders));
-//     },
-//   },
-// });
-
-// export const { saveOrder, clearOrders, removeOrder } = orderSlice.actions;
-// export default orderSlice.reducer;
-
 import { createSlice } from "@reduxjs/toolkit";
 
 // Безопасная загрузка из localStorage
@@ -81,20 +37,28 @@ const orderSlice = createSlice({
       );
     },
     setOrder: (state, action) => {
-      // Фильтруем только активные заказы (статус не 400 и не 500)
-      const activeOrders = action.payload.filter(
-        (order) => order.record?.status !== 400 && order.record?.status !== 500
+      const incoming = action.payload;
+      const updatedMap = new Map(
+        state.orders
+          .filter((o) => o.record && o.record.id !== undefined)
+          .map((o) => [o.record.id, o])
       );
-      state.orders = activeOrders;
 
-      const maxNumber = activeOrders.reduce(
-        (max, order) => (order.number > max ? order.number : max),
-        0
-      );
-      state.orderNumber = maxNumber + 1;
+      incoming.forEach((order) => {
+        if (order.record && order.record.id !== undefined) {
+          updatedMap.set(order.record.id, order);
+        }
+      });
+
+      state.orders = Array.from(updatedMap.values());
     },
   },
 });
 
-export const { saveOrder, clearOrders, removeOrder, setOrder } = orderSlice.actions;
+export const { saveOrder, clearOrders, removeOrder, setOrder } =
+  orderSlice.actions;
 export default orderSlice.reducer;
+
+
+
+ 

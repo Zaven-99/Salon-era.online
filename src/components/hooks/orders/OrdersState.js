@@ -1,9 +1,8 @@
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState, useCallback, useMemo } from "react";
 import CryptoJS from "crypto-js";
 import { toast } from "react-toastify";
 import { useDispatch } from "react-redux";
-
-import { saveOrder, setOrder } from "../../../store/slices/orderSlice";
+import { setOrder } from "../../../store/slices/orderSlice";
 
 export const useOrdersState = () => {
   const [orders, setOrders] = useState([]);
@@ -12,38 +11,36 @@ export const useOrdersState = () => {
   const [loading, setLoading] = useState(true);
   const [selectedDate, setSelectedDate] = useState(null);
   const [addOrderModal, setAddOrderModal] = useState(false);
-  const [ws, setWs] = useState(null);
 
   const hasMounted = useRef(false);
-  const previousOrdersLengthRef = useRef(0);
   const initialLoadRef = useRef(true);
   const dispatch = useDispatch();
-  const notificationSound = new Audio("/sound.mp3");
+  const notificationSound = useRef(new Audio("/sound.mp3"));
 
-  useEffect(() => {
-    const initialLoad = sessionStorage.getItem("ordersInitialLoad");
-    if (initialLoad === "done") {
-      initialLoadRef.current = false;
-    }
-  }, []);
-
+  // Ключ для AES
   const base64Key = "ECqDTm9UnVoFn2BD4vM2/Fgzda1470BvZo4t1PWAkuU=";
   const key = CryptoJS.enc.Base64.parse(base64Key);
 
-  const decryptField = (encryptedValue) => {
-    try {
-      const decrypted = CryptoJS.AES.decrypt(encryptedValue, key, {
-        mode: CryptoJS.mode.ECB,
-        padding: CryptoJS.pad.Pkcs7,
-      });
-      return decrypted.toString(CryptoJS.enc.Utf8);
-    } catch (e) {
-      // console.error("Ошибка при расшифровке:", e);
-      return "Ошибка";
-    }
-  };
+  // Функция расшифровки поля
+  const decryptField = useCallback(
+    (encryptedValue) => {
+      if (!encryptedValue) return "";
+      try {
+        const decrypted = CryptoJS.AES.decrypt(encryptedValue, key, {
+          mode: CryptoJS.mode.ECB,
+          padding: CryptoJS.pad.Pkcs7,
+        });
+        return decrypted.toString(CryptoJS.enc.Utf8);
+      } catch {
+        return "Ошибка";
+      }
+    },
+    [key]
+  );
 
-  const formatDate = (date) => {
+  // Форматирование даты
+  const formatDate = useCallback((date) => {
+    if (!date) return "";
     const dateOptions = { year: "numeric", month: "long", day: "numeric" };
     const timeOptions = { hour: "2-digit", minute: "2-digit", hour12: false };
     const formattedDate = new Date(date).toLocaleDateString(
@@ -55,129 +52,152 @@ export const useOrdersState = () => {
       timeOptions
     );
     return `${formattedDate}, ${formattedTime}`;
-  };
+  }, []);
 
-  const filterOrdersByDate = (date, ordersList) => {
-    const ordersToFilter = ordersList || orders;
-    if (!date) {
-      setFilteredOrders(
-        ordersToFilter.filter(
-          (order) =>
-            order.record?.status !== 400 && order.record?.status !== 500
-        )
-      );
-    } else {
-      const formattedDate = formatDate(date).split(",")[0];
-      setFilteredOrders(
-        ordersToFilter.filter(
-          (order) =>
-            formatDate(order.record?.dateRecord).split(",")[0] ===
-              formattedDate &&
-            order.record?.status !== 400 &&
-            order.record?.status !== 500
-        )
-      );
-    }
-  };
+  // Группировка заказов по дате
+  const groupOrdersByDate = useCallback(
+    (ordersList) =>
+      ordersList.reduce((acc, order) => {
+        if (order.record?.status !== 400 && order.record?.status !== 500) {
+          const date = formatDate(order.record?.date_record).split(",")[0];
+          if (!acc[date]) acc[date] = [];
+          acc[date].push(order);
+        }
+        return acc;
+      }, {}),
+    [formatDate]
+  );
 
+  const groupedOrders = useMemo(
+    () => groupOrdersByDate(filteredOrders),
+    [filteredOrders, groupOrdersByDate]
+  );
+
+  // Фильтрация заказов по дате
+  const filterOrdersByDate = useCallback(
+    (date, ordersList = orders) => {
+      if (!date) {
+        setFilteredOrders(
+          ordersList.filter(
+            (order) =>
+              order.record?.status !== 400 && order.record?.status !== 500
+          )
+        );
+      } else {
+        const formattedDate = formatDate(date).split(",")[0];
+        setFilteredOrders(
+          ordersList.filter(
+            (order) =>
+              formatDate(order.record?.date_record).split(",")[0] ===
+                formattedDate &&
+              order.record?.status !== 400 &&
+              order.record?.status !== 500
+          )
+        );
+      }
+    },
+    [orders, formatDate]
+  );
+
+  // Обновляем фильтр и redux при изменении orders или selectedDate
   useEffect(() => {
-    let socket = null;
+    filterOrdersByDate(selectedDate, orders);
+    dispatch(setOrder(orders));
+  }, [orders, selectedDate, filterOrdersByDate, dispatch]);
+
+  // WebSocket подключение с useRef и экспоненциальным переподключением
+  useEffect(() => {
+    const socketRef = { current: null };
     let reconnectTimeout = null;
+    let reconnectAttempts = 0;
 
     const connect = () => {
-      socket = new WebSocket("wss://api.salon-era.ru/websocket/records");
+      socketRef.current = new WebSocket(
+        "wss://api.salon-era.ru/websocket/records"
+      );
 
-      socket.onopen = () => {
-        // console.log("WebSocket открыт");
+      socketRef.current.onopen = () => {
+        reconnectAttempts = 0;
         setError(null);
         setLoading(false);
+        console.log("WebSocket подключен");
       };
 
-      socket.onmessage = async (event) => {
-        const data = JSON.parse(event.data);
+      socketRef.current.onmessage = async (event) => {
+        try {
+          const data = JSON.parse(event.data);
+          const ordersArray = Array.isArray(data) ? data : [data];
 
-        const updatedOrders = await Promise.all(
-          data.map(async (order) => {
-            const hasDecryptedClient =
-              order.clientFrom?.firstName && order.employeeTo?.firstName;
+          const decryptedOrders = await Promise.all(
+            ordersArray.map(async (order) => {
+              if (order.clientFrom?.firstName && order.employeeTo?.firstName) {
+                return {
+                  ...order,
+                  clientFrom: {
+                    ...order.clientFrom,
+                    firstName: decryptField(order.clientFrom.firstName),
+                    lastName: decryptField(order.clientFrom.lastName),
+                  },
+                  employeeTo: {
+                    ...order.employeeTo,
+                    firstName: decryptField(order.employeeTo.firstName),
+                    lastName: decryptField(order.employeeTo.lastName),
+                  },
+                };
+              }
+              return order;
+            })
+          );
 
-            if (hasDecryptedClient) {
-              return {
-                ...order,
-                clientFrom: {
-                  ...order.clientFrom,
-                  firstName: decryptField(order.clientFrom.firstName),
-                  lastName: decryptField(order.clientFrom.lastName),
-                },
-                employeeTo: {
-                  ...order.employeeTo,
-                  firstName: decryptField(order.employeeTo.firstName),
-                  lastName: decryptField(order.employeeTo.lastName),
-                },
-              };
+          const validOrders = decryptedOrders.filter(
+            (order) => order && order.record?.id !== undefined
+          );
+
+          setOrders((prevOrders) => {
+            const newOrders = validOrders.filter(
+              (newOrder) =>
+                !prevOrders.some((o) => o.record?.id === newOrder.record?.id)
+            );
+            if (newOrders.length === 0) return prevOrders;
+
+            if (hasMounted.current && !initialLoadRef.current) {
+              newOrders.forEach((newOrder) => {
+                toast.info(
+                  `Новый заказ от ${
+                    newOrder.clientFrom?.firstName || "Клиент"
+                  } ${newOrder.clientFrom?.lastName || ""}`
+                );
+                notificationSound.current.play().catch(() => {});
+              });
             }
 
-            return order;
-          })
-        );
-
-        setOrders((prev) => {
-          const map = new Map(prev.map((o) => [o.record?.id, o]));
-          updatedOrders.forEach((o) => {
-            if (o.record?.id) map.set(o.record.id, o);
+            return [...prevOrders, ...newOrders];
           });
-
-          const newOrders = Array.from(map.values());
-
-          filterOrdersByDate(selectedDate, newOrders);
-
-          if (
-            hasMounted.current &&
-            newOrders.length > previousOrdersLengthRef.current &&
-            !initialLoadRef.current
-          ) {
-            const newOrder = updatedOrders[0];
-
-            toast.info(
-              `Новый заказ от ${newOrder.clientFrom?.firstName || "Клиент"} ${
-                newOrder.clientFrom?.lastName || ""
-              }`
-            );
-
-            notificationSound
-              .play()
-              .catch((e) => console.warn("Ошибка звука:", e));
-
-            dispatch(saveOrder(newOrder));
-          }
-
-          dispatch(setOrder(newOrders));
-
-          previousOrdersLengthRef.current = newOrders.length;
-          hasMounted.current = true;
 
           if (initialLoadRef.current) {
             initialLoadRef.current = false;
             sessionStorage.setItem("ordersInitialLoad", "done");
           }
-
-          return newOrders;
-        });
+          hasMounted.current = true;
+        } catch (e) {
+          setError("Ошибка обработки данных WebSocket");
+          console.error(e);
+        }
       };
 
-      socket.onerror = (err) => {
-        // console.error("WebSocket ошибка:", err);
+      socketRef.current.onerror = (err) => {
+        console.error("WebSocket ошибка:", err);
+        setError("Ошибка WebSocket");
       };
 
-      socket.onclose = (event) => {
-        // console.warn("WebSocket закрыт", event.code, event.reason);
-        reconnectTimeout = setTimeout(() => {
-          // console.log("Переподключение к WebSocket...");
-          connect();
-        }, 5000);
+      socketRef.current.onclose = () => {
+        reconnectAttempts++;
+        const timeout = Math.min(30000, 5000 * 2 ** reconnectAttempts); // max 30 сек
+        console.log(
+          `WebSocket закрыт, переподключение через ${timeout / 1000} секунд`
+        );
+        reconnectTimeout = setTimeout(connect, timeout);
       };
-
-      setWs(socket);
     };
 
     connect();
@@ -185,27 +205,33 @@ export const useOrdersState = () => {
     return () => {
       if (reconnectTimeout) clearTimeout(reconnectTimeout);
       if (
-        socket &&
-        (socket.readyState === WebSocket.OPEN ||
-          socket.readyState === WebSocket.CONNECTING)
+        socketRef.current &&
+        (socketRef.current.readyState === WebSocket.OPEN ||
+          socketRef.current.readyState === WebSocket.CONNECTING)
       ) {
-        socket.close(1000, "Компонент размонтирован");
+        socketRef.current.close(1000, "Компонент размонтирован");
       }
     };
-  }, [dispatch]);
+  }, [decryptField, dispatch]);
 
+  // Обновляем фильтр при изменении выбранной даты
   useEffect(() => {
     filterOrdersByDate(selectedDate);
-  }, [orders, selectedDate]);
+  }, [selectedDate, filterOrdersByDate]);
 
   const toggleOpen = () => {
     setAddOrderModal(true);
     document.body.style.overflow = "hidden";
   };
 
+  useEffect(() => {
+    if (!addOrderModal) {
+      document.body.style.overflow = "";
+    }
+  }, [addOrderModal]);
+
   return {
     orders,
-    setOrders,
     filteredOrders,
     error,
     loading,
@@ -213,13 +239,11 @@ export const useOrdersState = () => {
     setSelectedDate,
     addOrderModal,
     setAddOrderModal,
-    ws,
     toggleOpen,
     filterOrdersByDate,
     formatDate,
     setError,
+    groupedOrders,
+    setOrders,
   };
 };
-
-
- 

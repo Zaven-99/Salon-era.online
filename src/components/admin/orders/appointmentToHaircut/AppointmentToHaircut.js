@@ -10,7 +10,6 @@ import SignUpBlock from "./signUpBlock/SignUpBlock.js";
 import BtnBlock from "../../../btnBlock/BtnBlock.js";
 import { useForm } from "react-hook-form";
 import { AppointmentToHaircutState } from "./../../../hooks/appointmentToHaircut/AppointmentToHaircutState.js";
-import Spinner from "../../../spinner/Spinner";
 
 import styles from "./appointmentToHaircut.module.scss";
 
@@ -61,10 +60,6 @@ const AppointmentToHaircut = ({
     closeMessageDeleteClients,
     handleKeyDown,
   } = AppointmentToHaircutState({ addOrderModal, setAddOrderModal });
-
-  // if (loading) {
-  //   return <Spinner />;
-  // }
 
   return (
     <div>

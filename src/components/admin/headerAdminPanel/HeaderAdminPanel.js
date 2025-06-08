@@ -11,16 +11,16 @@ import styles from "./headerAdminPanel.module.scss";
 
 const HeaderAdminPanel = () => {
   const {
-    login,
     isMenuOpen,
     toggleMenu,
     showOtherModal,
     handleOtherModal,
     handleLogout,
   } = HeaderAdminPanelState();
-  
-  const orders = useSelector((state) => state.order.orders);
 
+  const orders = useSelector((state) => state.order.orders);
+  const employeeData = localStorage.getItem("employee");
+  const employee = employeeData ? JSON.parse(employeeData) : null;
   const menuItems = [
     { path: "/adminPanel/orders", label: "Заказы" },
     { path: "/adminPanel/history-orders", label: "История заказов" },
@@ -43,7 +43,7 @@ const HeaderAdminPanel = () => {
         rtl={false}
       />
       <div className={styles["header-top"]}>
-        <p className={styles.status}>Вы вошли как {login}</p>
+        <p className={styles.status}>Вы вошли как {employee.login}</p>
 
         <CustomButton
           label="Выйти"

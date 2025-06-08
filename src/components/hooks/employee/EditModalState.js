@@ -76,7 +76,6 @@ export const EditModalState = ({
   const uploadImage = async (event) => {
     const result = await compressAndPreviewImage(event, {}, setLoading);
     if (result) {
- 
       setSelectedFile(result.compressedFile);
       setImagePreview(result.dataUrl);
     }
@@ -87,20 +86,20 @@ export const EditModalState = ({
     setSelectedFile(null);
   };
 
-
-
   const handleSave = async (id) => {
     setLoading(true);
 
     const serviceToUpdate = { ...editedEmployee, id };
 
-    // Если логин не изменился, удаляем его из отправляемого объекта
+     
     if (employee?.login === editedEmployee.login) {
       delete serviceToUpdate.login;
     }
+    if (employee?.email === editedEmployee.email) {
+      delete serviceToUpdate.email;
+    }
 
     const formData = new FormData();
-   
 
     formData.append("clientData", JSON.stringify(serviceToUpdate));
 
@@ -120,7 +119,13 @@ export const EditModalState = ({
 
       if (!response.ok) {
         const errorMessage = await response.json();
-        throw new Error(`Ошибка при сохранении: ${errorMessage}`);
+        throw new Error(
+          `Ошибка при сохранении: ${
+            errorMessage.message ||
+            errorMessage.errorDescription ||
+            JSON.stringify(errorMessage)
+          }`
+        );
       }
 
       setEmployee((prevEmployee) =>
@@ -135,7 +140,6 @@ export const EditModalState = ({
       setLoading(false);
     }
   };
-  
 
   return {
     register,

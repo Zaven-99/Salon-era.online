@@ -91,6 +91,7 @@ export const SignUpBlockState = ({
         phone: data.phone,
         gender: data.gender,
         token: true,
+        role: "USER",
       };
 
       localStorage.setItem("user", JSON.stringify(userPayload));

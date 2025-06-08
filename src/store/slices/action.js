@@ -1,13 +1,22 @@
-import { setUser, removeUser } from "./userSlice";
+import { setEmployee, removeEmployee } from "./employeeSlice";
+import {setUser, removeUser} from './userSlice'
 import { addService, removeService, clearServices } from "./serviceSlice";
 import { selectBarber, clearBarber, setSlotsForBarber } from "./barberSlice";
 import { saveOrder, clearOrders } from "./orderSlice";
 
-export const login = (userData) => (dispatch) => {
+export const loginEmployee = (userData) => (dispatch) => {
+  dispatch(setEmployee(userData));
+};
+
+export const logoutEmployee = () => (dispatch) => {
+  dispatch(removeEmployee());
+};
+
+export const loginUser = (userData) => (dispatch) => {
   dispatch(setUser(userData));
 };
 
-export const logout = () => (dispatch) => {
+export const logoutUser = () => (dispatch) => {
   dispatch(removeUser());
 };
 

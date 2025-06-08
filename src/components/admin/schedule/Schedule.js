@@ -74,6 +74,7 @@ const Schedule = () => {
           setMessage={setMessage}
           selectedCells={selectedCells}
           daysOfWeek={daysOfWeek}
+          loading={loading}
         />
       </div>
 

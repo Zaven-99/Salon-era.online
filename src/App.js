@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { useDispatch } from "react-redux";
-import { setUser, removeUser } from "./store/slices/userSlice";
+import { setEmployee, removeEmployee } from "./store/slices/employeeSlice.js";
 import { Route, Routes } from "react-router-dom";
 import { useNavigate } from "react-router-dom";
 import Login from "./components/admin/login/Login";
@@ -38,12 +38,13 @@ function App() {
     filterOrdersByDate,
     formatDate,
     setError,
+    groupedOrders,
   } = useOrdersState();
 
   useEffect(() => {
     const savedUser = JSON.parse(localStorage.getItem("user"));
     if (savedUser) {
-      dispatch(setUser(savedUser));
+      dispatch(setEmployee(savedUser));
     }
   }, [dispatch]);
 
@@ -95,7 +96,7 @@ function App() {
 
   const handleSessionExpiredConfirm = () => {
     localStorage.removeItem("user");
-    dispatch(removeUser());
+    dispatch(removeEmployee());
     setSessionExpired(false);
     navigate("/");
   };
@@ -134,6 +135,7 @@ function App() {
                 toggleOpen={toggleOpen}
                 filterOrdersByDate={filterOrdersByDate}
                 formatDate={formatDate}
+                groupedOrders={groupedOrders}
                 setError={setError}
               />
             </AdminPanelLayout>

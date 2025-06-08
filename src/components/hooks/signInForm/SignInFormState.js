@@ -2,7 +2,7 @@ import { useState, useEffect } from "react";
 import { useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { useForm } from "react-hook-form";
-import { setUser } from "../../../store/slices/userSlice";
+import { setEmployee } from "../../../store/slices/employeeSlice";
 
 export const SignInFormState = () => {
   const [showPassword, setShowPassword] = useState(false);
@@ -122,7 +122,7 @@ export const SignInFormState = () => {
 
       const data = await response.json();
 
-      const user = {
+      const employee = {
         id: data.id,
         firstName: data.firstName,
         lastName: data.lastName,
@@ -135,8 +135,8 @@ export const SignInFormState = () => {
         role: "ADMIN",
       };
 
-      localStorage.setItem("user", JSON.stringify(user));
-      dispatch(setUser(user));
+      localStorage.setItem("employee", JSON.stringify(employee));
+      dispatch(setEmployee(employee));
       navigate("/adminPanel/orders");
     } catch (error) {
       try {
@@ -185,14 +185,3 @@ export const SignInFormState = () => {
     onSubmit,
   };
 };
-
-
-
-
-
-
-
-
-
-
- 

@@ -1,5 +1,6 @@
 import { configureStore } from "@reduxjs/toolkit";
 import useReducer from "./slices/userSlice";
+import employeeReducer from "./slices/employeeSlice";
 import serviceReducer from "./slices/serviceSlice";
 import barberReducer from "./slices/barberSlice";
 import orderReducer from "./slices/orderSlice";
@@ -10,6 +11,7 @@ import { orderMiddleware } from "./slices/orderMiddleware";
 export const store = configureStore({
   reducer: {
     user: useReducer,
+    employee:employeeReducer,
     service: serviceReducer,
     barber: barberReducer,
     order: orderReducer,

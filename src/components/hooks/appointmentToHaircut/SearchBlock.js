@@ -41,7 +41,7 @@ export const SearchClient = ({ setClient, setOfferModal }) => {
         method: "GET",
         headers: {
           "Content-Type": "application/json",
-          Authorization: `Bearer ${token}`,
+          // Authorization: `Bearer ${token}`,
         },
         credentials: "include",
       });

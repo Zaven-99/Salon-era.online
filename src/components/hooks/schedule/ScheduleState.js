@@ -297,10 +297,6 @@ export const ScheduleState = () => {
         scheludeDateEnd: formattedEndTime,
       })
     );
-    // Можно вывести содержимое formData
-    for (const pair of formData.entries()) {
-      console.log(`📦 FormData: ${pair[0]} = ${pair[1]}`);
-    }
 
     try {
       const response = await fetch(
@@ -331,7 +327,6 @@ export const ScheduleState = () => {
       setLoading(false);
     }
   };
-  
 
   return {
     control,

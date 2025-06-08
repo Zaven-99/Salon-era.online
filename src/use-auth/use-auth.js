@@ -12,7 +12,7 @@ export function useAuth() {
     role,
     imageLink,
     id,
-  } = useSelector((state) => state.user);
+  } = useSelector((state) => state.employee);
   return {
     isAuth: !!login,
     id,

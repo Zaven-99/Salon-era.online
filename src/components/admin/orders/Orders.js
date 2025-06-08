@@ -24,6 +24,7 @@ const Orders = ({
   filterOrdersByDate,
   formatDate,
   setError,
+  groupedOrders,
 }) => {
   if (loading) {
     return (
@@ -83,6 +84,7 @@ const Orders = ({
         setOrders={setOrders}
         setError={setError}
         formatDate={formatDate}
+        groupedOrders={groupedOrders}
       />
     </div>
   );

@@ -1,6 +1,7 @@
-import React from 'react';
+import React from "react";
 
-import styles from './table.module.scss'
+import styles from "./table.module.scss";
+import Spinner from "../../../spinner/Spinner";
 
 const Table = ({
   setSelectedCell,

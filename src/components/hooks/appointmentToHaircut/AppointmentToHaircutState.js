@@ -3,7 +3,7 @@ import { useSelector, useDispatch } from "react-redux";
 import { clearBarber } from "../../../store/slices/barberSlice.js";
 import { clearServices } from "../../../store/slices/serviceSlice.js";
 import CryptoJS from "crypto-js";
-import { setUser } from "../../../store/slices/userSlice";
+import { setUser } from "../../../store/slices/userSlice.js";
 
 export const AppointmentToHaircutState = ({ setAddOrderModal }) => {
   const dispatch = useDispatch();
@@ -47,7 +47,7 @@ export const AppointmentToHaircutState = ({ setAddOrderModal }) => {
     const fetchData = async () => {
       try {
         const [barbersResponse, categoriesResponse] = await Promise.all([
-          fetch("https://api.salon-era.ru/clients/all", {
+          fetch("https://api.salon-era.ru/employees/all", {
             method: "GET",
             credentials: "include", // ✅ куки будут отправлены
           }),
@@ -91,10 +91,7 @@ export const AppointmentToHaircutState = ({ setAddOrderModal }) => {
     if (selectedServices.length === 0) return [];
 
     return barbers.filter((barber) => {
-      if (
-        !Array.isArray(barber.arrayTypeWork) ||
-        barber.clientType !== "employee"
-      )
+      if (!Array.isArray(barber.arrayTypeWork) || barber.role === "EMPLOYEE")
         return false;
       const selectedCategoryIds = selectedServices.map(
         (service) => service.category
@@ -145,14 +142,18 @@ export const AppointmentToHaircutState = ({ setAddOrderModal }) => {
       JSON.stringify([
         {
           id_client_from: client.id,
-          id_client_to: selectedBarber.id,
+          id_employee_to: selectedBarber.id,
           id_service: selectedServices[0].id,
           number: "",
           status: 0,
-          dateRecord: formattedDateTimeForServer(),
+          date_record: formattedDateTimeForServer(),
         },
       ])
     );
+
+    for (let pair of formData.entries()) {
+      console.log(pair[0] + ": " + pair[1]);
+    }
 
     try {
       const response = await fetch("https://api.salon-era.ru/records", {
@@ -162,6 +163,8 @@ export const AppointmentToHaircutState = ({ setAddOrderModal }) => {
       });
 
       if (!response.ok) {
+        const errorText = await response.text();
+        console.error("Ошибка от сервера:", response.status, errorText);
         throw new Error("Ошибка при отправке данных на сервер");
       }
 
@@ -176,12 +179,14 @@ export const AppointmentToHaircutState = ({ setAddOrderModal }) => {
         phone: encryptField(data.phone),
         gender: parseInt(data.gender),
         token: true,
+        role: "",
       };
 
       localStorage.setItem("user", JSON.stringify(userPayload));
       dispatch(setUser(userPayload));
     } catch (error) {
       alert("Извините произошла ошибка!");
+      console.error("Ошибка при отправке данных:", error);
     } finally {
       setLoading(false);
       toggleClose();

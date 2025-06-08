@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import Calendar from "react-calendar";
+import "react-calendar/dist/Calendar.css";
 import Spinner from "../../../../spinner/Spinner";
 
 import styles from "./calendarBlock.module.scss";
@@ -14,8 +15,9 @@ const CalendarBlock = ({
   const [availableSlots, setAvailableSlots] = useState([]);
   const [errorMessage, setErrorMessage] = useState("");
   const [loading, setLoading] = useState(false);
+  const [allSlots, setAllSlots] = useState([]);
 
-  const fetchDate = async (selectedDate) => {
+  const fetchAllSlotsOnce = async () => {
     setLoading(true);
     if (!selectedBarber) return;
 
@@ -26,12 +28,13 @@ const CalendarBlock = ({
 
     try {
       const response = await fetch(
-        `https://api.salon-era.ru/clients/timeslot/${selectedBarber.id}/${sumDuration}`,
+        `https://api.salon-era.ru/employees/timeslot/${selectedBarber.id}/${sumDuration}`,
         {
           method: "GET",
           headers: {
             "Content-Type": "application/json",
           },
+          credentials: "include",
         }
       );
 
@@ -41,28 +44,13 @@ const CalendarBlock = ({
 
       const data = await response.json();
 
-      let filteredSlots = data.filter((slot) => {
-        const slotDate = new Date(slot);
+      // Оставляем только будущие слоты
+      const currentDate = new Date();
+      const upcomingSlots = data.filter(
+        (slot) => new Date(slot) >= currentDate
+      );
 
-        const currentDate = new Date();
-        if (slotDate < currentDate) {
-          return false;
-        }
-
-        return (
-          slotDate.getFullYear() === selectedDate.getFullYear() &&
-          slotDate.getMonth() === selectedDate.getMonth() &&
-          slotDate.getDate() === selectedDate.getDate()
-        );
-      });
-
-      if (sumDuration > filteredSlots.length) {
-        setErrorMessage("Сегодня записаться на эту услугу невозможно");
-        setAvailableSlots([]);
-      } else {
-        setErrorMessage("");
-        setAvailableSlots(filteredSlots);
-      }
+      setAllSlots(upcomingSlots);
     } catch (error) {
       alert(`Произошла ошибка при получении данных. ${error}`);
     } finally {
@@ -70,9 +58,45 @@ const CalendarBlock = ({
     }
   };
 
+  const filterSlotsByDate = (selectedDate) => {
+    // Преобразуем в объект Date, если это строка или другой тип
+    const dateObj =
+      selectedDate instanceof Date ? selectedDate : new Date(selectedDate);
+
+    const sumDuration = selectedServices.reduce(
+      (total, service) => total + service.duration,
+      0
+    );
+
+    const filteredSlots = allSlots.filter((slot) => {
+      const slotDate = new Date(slot);
+      return (
+        slotDate.getFullYear() === dateObj.getFullYear() &&
+        slotDate.getMonth() === dateObj.getMonth() &&
+        slotDate.getDate() === dateObj.getDate()
+      );
+    });
+
+    if (sumDuration > filteredSlots.length) {
+      setErrorMessage("Сегодня записаться на эту услугу невозможно");
+      setAvailableSlots([]);
+    } else {
+      setErrorMessage("");
+      setAvailableSlots(filteredSlots);
+    }
+  };
+
+  // Загружаем все слоты один раз при изменении selectedBarber или услуг
   useEffect(() => {
-    fetchDate(date);
-  }, [date]);
+    fetchAllSlotsOnce();
+  }, [selectedBarber, selectedServices]);
+
+  // Фильтруем при изменении даты или списка всех слотов
+  useEffect(() => {
+    if (allSlots.length > 0) {
+      filterSlotsByDate(date);
+    }
+  }, [date, allSlots]);
 
   const handleDateChange = (newDate) => {
     const resetTime = new Date(newDate);
@@ -80,6 +104,7 @@ const CalendarBlock = ({
     setDate(resetTime);
     setSelectedTime(null);
     setErrorMessage("");
+    filterSlotsByDate(allSlots, resetTime);
   };
 
   const handleTimeSelect = (slot) => {

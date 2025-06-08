@@ -13,6 +13,7 @@ const OrdersAdminPanelPage = ({
   filterOrdersByDate,
   formatDate,
   setError,
+  groupedOrders,
 }) => {
   return (
     <div>
@@ -29,6 +30,7 @@ const OrdersAdminPanelPage = ({
         filterOrdersByDate={filterOrdersByDate}
         formatDate={formatDate}
         setError={setError}
+        groupedOrders={groupedOrders}
       />
     </div>
   );

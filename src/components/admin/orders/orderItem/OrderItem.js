@@ -5,13 +5,19 @@ import { OrderItemState } from "../../../hooks/orders/OrderItemState";
 
 import styles from "./orderItem.module.scss";
 
-const OrderItem = ({ filteredOrders, setOrders, setError, formatDate }) => {
+const OrderItem = ({
+  filteredOrders,
+  setOrders,
+  setError,
+  formatDate,
+  groupedOrders,
+}) => {
   const {
     durationToText,
     acceptOrder,
     closeOrder,
     cancelOrder,
-    groupedOrders,
+    // groupedOrders,
     editingPriceId,
     setEditingPriceId,
     newPrice,
@@ -95,7 +101,7 @@ const OrderItem = ({ filteredOrders, setOrders, setError, formatDate }) => {
                   </div>
                   <div className={styles["record-item__inner"]}>
                     <strong>Дата:</strong>
-                    <div>{formatDate(order.record?.dateRecord)}</div>
+                    <div>{formatDate(order.record?.date_record)}</div>
                   </div>
                   <div className={styles["record-item__inner"]}>
                     <strong>Длительность:</strong>

@@ -26,7 +26,6 @@ const SignUpBlock = ({
     loading,
   } = SignUpBlockState({
     setSuccesSignUp,
-
     setClient,
     setOfferModal,
   });

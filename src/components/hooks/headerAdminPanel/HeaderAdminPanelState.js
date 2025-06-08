@@ -1,9 +1,8 @@
 import { useState } from "react";
 import { useDispatch } from "react-redux";
-import { removeUser, setUser } from "../../../store/slices/userSlice";
+import { removeEmployee } from "../../../store/slices/employeeSlice";
+import { removeUser } from "../../../store/slices/userSlice";
 import { useNavigate } from "react-router-dom";
-
-import { useAuth } from "../../../use-auth/use-auth";
 
 export const HeaderAdminPanelState = () => {
   const [loading, setLoading] = useState(false);
@@ -12,8 +11,6 @@ export const HeaderAdminPanelState = () => {
 
   const dispatch = useDispatch();
   const navigate = useNavigate();
-  const { login,  } = useAuth();
- 
 
   const toggleMenu = () => setIsMenuOpen((prev) => !prev);
   const handleOtherModal = () => setShowOtherModal((prev) => !prev);
@@ -39,17 +36,18 @@ export const HeaderAdminPanelState = () => {
 
     // Очистка и редирект
     localStorage.removeItem("user");
+    localStorage.removeItem("employee");
     localStorage.removeItem("token");
+    dispatch(removeEmployee());
     dispatch(removeUser());
-    setUser(null);
+
     navigate("/");
     await new Promise((resolve) => setTimeout(resolve, 1000));
- 
+
     setLoading(false);
   };
 
   return {
-    login,
     loading,
     isMenuOpen,
     toggleMenu,
