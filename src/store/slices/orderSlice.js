@@ -58,7 +58,3 @@ const orderSlice = createSlice({
 export const { saveOrder, clearOrders, removeOrder, setOrder } =
   orderSlice.actions;
 export default orderSlice.reducer;
-
-
-
- 

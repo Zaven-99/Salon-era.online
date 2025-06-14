@@ -26,8 +26,8 @@ const EditNews = ({
     mode: "onChange",
     defaultValues: {
       name: "",
-      mainText: "",
-      imageLink: "",
+      main_text: "",
+      image_link: "",
     },
   });
   const {
@@ -75,11 +75,11 @@ const EditNews = ({
         })}
       />
       <textarea
-        value={editedNews.mainText}
+        value={editedNews.main_text}
         onChange={handleChange}
         placeholder="Описание"
         className={styles["description"]}
-        name="mainText"
+        name="main_text"
       />
       <ImagePreview
         deletImagePreview={deletImagePreview}

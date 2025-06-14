@@ -94,7 +94,7 @@ const AddWork = ({ setWorks, toggleClose, categories }) => {
       />
 
       <Controller
-        name="imageLink"
+        name="image_link"
         control={control}
         rules={{ required: "Это поле обязательно" }}
         render={({ field, fieldState }) => (

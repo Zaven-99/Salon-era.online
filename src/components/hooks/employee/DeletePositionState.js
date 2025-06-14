@@ -8,7 +8,7 @@ export const DeletePositionState = (toggleClose) => {
     setLoading(true);
     try {
       const response = await fetch(
-        "https://api.salon-era.ru/catalogs/all/filter?field=category&state=eq&value=должность",
+        "https://api.salon-era.ru/catalogs/all/filter?field=category&state=eq&value=Должность",
         {
           method: "GET",
           credentials: "include",
@@ -24,6 +24,7 @@ export const DeletePositionState = (toggleClose) => {
       }
 
       const data = await response.json();
+      console.log(data)
       setPosition(data);
     } catch (e) {
       console.error("Ошибка загрузки должностей:", e);

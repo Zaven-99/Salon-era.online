@@ -73,7 +73,7 @@ export const WorkListState = (setWorks) => {
     } finally {
       setLoading(false);
       document.body.style.overflow = "scroll";
-      window.location.reload();
+      // window.location.reload();
     }
   };
 
@@ -108,21 +108,23 @@ export const WorkListState = (setWorks) => {
         {
           method: "POST",
           body: formData,
+          credentials: "include",
         }
       );
 
       if (!response.ok) {
-        const errorMessage = await response.json();
+        const errorMessage = await response.text();
         throw new Error(`Ошибка при сохранении услуги: ${errorMessage}`);
       }
 
       setWorks((prevWorks) =>
         prevWorks.map((works) => (works.id === id ? editedWorks : works))
       );
+
       setWorksId(null);
       setEditedWorks({});
     } catch (error) {
-      console.error("Ошибка:", error);
+      console.log(error);
     } finally {
       setLoading(false);
       window.location.reload();
@@ -133,15 +135,13 @@ export const WorkListState = (setWorks) => {
     setImagePreview(null);
   };
 
-   const uploadImage = async (event) => {
- 
-      const result = await compressAndPreviewImage(event, {}, setLoading);
-      if (result) {
-   
-        setSelectedFile(result.compressedFile);
-        setImagePreview(result.dataUrl);
-      }
-    };
+  const uploadImage = async (event) => {
+    const result = await compressAndPreviewImage(event, {}, setLoading);
+    if (result) {
+      setSelectedFile(result.compressedFile);
+      setImagePreview(result.dataUrl);
+    }
+  };
 
   const handleEdit = (slides) => {
     setWorksId(slides.id);

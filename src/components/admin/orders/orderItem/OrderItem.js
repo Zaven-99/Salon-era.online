@@ -4,6 +4,7 @@ import BtnBlock from "../../../btnBlock/BtnBlock";
 import { OrderItemState } from "../../../hooks/orders/OrderItemState";
 
 import styles from "./orderItem.module.scss";
+import Spinner from "../../../spinner/Spinner";
 
 const OrderItem = ({
   filteredOrders,
@@ -17,13 +18,17 @@ const OrderItem = ({
     acceptOrder,
     closeOrder,
     cancelOrder,
-    // groupedOrders,
     editingPriceId,
     setEditingPriceId,
     newPrice,
     setNewPrice,
     updateOrderPrice,
+    loading,
   } = OrderItemState({ filteredOrders, setOrders, setError, formatDate });
+
+  if (loading) {
+    return <Spinner />;
+  }
 
   return (
     <div>
@@ -41,7 +46,7 @@ const OrderItem = ({
                     <strong>Клиент:</strong>
                     <div>
                       {order.clientFrom
-                        ? `${order.clientFrom?.firstName} ${order.clientFrom?.lastName}`
+                        ? `${order.clientFrom?.first_name} ${order.clientFrom?.last_name}`
                         : "Неизвестный клиент"}
                     </div>
                   </div>
@@ -49,7 +54,7 @@ const OrderItem = ({
                     <strong>Мастер:</strong>
                     <div>
                       {order.employeeTo
-                        ? `${order.employeeTo?.firstName} ${order.employeeTo?.lastName}`
+                        ? `${order.employeeTo?.first_name} ${order.employeeTo?.last_name}`
                         : "Неизвестный парикмахер"}
                     </div>
                   </div>
@@ -86,15 +91,17 @@ const OrderItem = ({
                           onClick={() => {
                             setEditingPriceId(order.record.id);
                             setNewPrice(
-                              order.record.price ?? order.service?.priceLow ?? 0
+                              order.record.price ??
+                                order.service?.price_low ??
+                                0
                             );
                           }}
                         >
                           {order.record?.price
                             ? `${order.record.price} р.`
-                            : order.service?.priceMax
-                            ? `${order.service?.priceLow}–${order.service?.priceMax} р.`
-                            : `${order.service?.priceLow} р.`}
+                            : order.service?.price_max
+                            ? `${order.service?.price_low}–${order.service?.price_max} р.`
+                            : `${order.service?.price_low} р.`}
                         </span>
                       )}
                     </div>

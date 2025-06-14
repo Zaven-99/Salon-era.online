@@ -27,75 +27,75 @@ export const SignInFormState = () => {
   });
 
   // ---- reCAPTCHA v3 ----
-  // const RECAPTCHA_SITE_KEY = "6Lc4ZFMrAAAAAD8VgxLc7E-1bhw5QArUSREEQE4U";
+  const RECAPTCHA_SITE_KEY = "6Lc4ZFMrAAAAAD8VgxLc7E-1bhw5QArUSREEQE4U";
 
-  // useEffect(() => {
-  //   const scriptId = "recaptcha-v3-script";
-  //   if (!document.getElementById(scriptId)) {
-  //     const script = document.createElement("script");
-  //     script.id = scriptId;
-  //     script.src = `https://www.google.com/recaptcha/api.js?render=${RECAPTCHA_SITE_KEY}`;
-  //     script.async = true;
-  //     document.body.appendChild(script);
-  //   }
-  // }, []);
+  useEffect(() => {
+    const scriptId = "recaptcha-v3-script";
+    if (!document.getElementById(scriptId)) {
+      const script = document.createElement("script");
+      script.id = scriptId;
+      script.src = `https://www.google.com/recaptcha/api.js?render=${RECAPTCHA_SITE_KEY}`;
+      script.async = true;
+      document.body.appendChild(script);
+    }
+  }, []);
 
-  // const loadRecaptchaScript = () => {
-  //   return new Promise((resolve) => {
-  //     if (window.grecaptcha) {
-  //       resolve();
-  //     } else {
-  //       const checkInterval = setInterval(() => {
-  //         if (window.grecaptcha) {
-  //           clearInterval(checkInterval);
-  //           resolve();
-  //         }
-  //       }, 100);
-  //     }
-  //   });
-  // };
+  const loadRecaptchaScript = () => {
+    return new Promise((resolve) => {
+      if (window.grecaptcha) {
+        resolve();
+      } else {
+        const checkInterval = setInterval(() => {
+          if (window.grecaptcha) {
+            clearInterval(checkInterval);
+            resolve();
+          }
+        }, 100);
+      }
+    });
+  };
 
   const onSubmit = async (formValues) => {
     setErrorMessages({});
 
     try {
-      // await loadRecaptchaScript();
+      await loadRecaptchaScript();
 
-      // if (!window.grecaptcha || !window.grecaptcha.execute) {
-      //   setErrorMessages({
-      //     general: "Не удалось загрузить reCAPTCHA. Попробуйте позже.",
-      //   });
-      //   return;
-      // }
+      if (!window.grecaptcha || !window.grecaptcha.execute) {
+        setErrorMessages({
+          general: "Не удалось загрузить reCAPTCHA. Попробуйте позже.",
+        });
+        return;
+      }
 
-      // const recaptchaToken = await window.grecaptcha.execute(
-      //   RECAPTCHA_SITE_KEY,
-      //   {
-      //     action: "submit",
-      //   }
-      // );
+      const recaptchaToken = await window.grecaptcha.execute(
+        RECAPTCHA_SITE_KEY,
+        {
+          action: "submit",
+        }
+      );
 
-      // if (!recaptchaToken) {
-      //   setErrorMessages({
-      //     general: "Пожалуйста, пройдите проверку reCAPTCHA.",
-      //   });
-      //   return;
-      // }
+      if (!recaptchaToken) {
+        setErrorMessages({
+          general: "Пожалуйста, пройдите проверку reCAPTCHA.",
+        });
+        return;
+      }
 
-      // const captchaResponse = await fetch(
-      //   "https://api.salon-era.ru/captcha/submit-form",
-      //   {
-      //     method: "POST",
-      //     body: new URLSearchParams({
-      //       "g-recaptcha-response": recaptchaToken,
-      //     }),
-      //   }
-      // );
+      const captchaResponse = await fetch(
+        "https://api.salon-era.ru/captcha/submit-form",
+        {
+          method: "POST",
+          body: new URLSearchParams({
+            "g-recaptcha-response": recaptchaToken,
+          }),
+        }
+      );
 
-      // if (!captchaResponse.ok) {
-      //   const text = await captchaResponse.text();
-      //   throw new Error(`Ошибка при проверке капчи: ${text}`);
-      // }
+      if (!captchaResponse.ok) {
+        const text = await captchaResponse.text();
+        throw new Error(`Ошибка при проверке капчи: ${text}`);
+      }
 
       const url = "https://api.salon-era.ru/employees/auth";
       const requestBody = {
@@ -124,13 +124,13 @@ export const SignInFormState = () => {
 
       const employee = {
         id: data.id,
-        firstName: data.firstName,
-        lastName: data.lastName,
+        first_name: data.first_name,
+        last_name: data.last_name,
         login: data.login,
         phone: data.phone,
         email: data.email,
         gender: data.gender,
-        imageLink: data.imageLink,
+        image_link: data.image_link,
         token: true,
         role: "ADMIN",
       };

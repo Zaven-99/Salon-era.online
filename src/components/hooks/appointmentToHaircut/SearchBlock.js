@@ -32,7 +32,6 @@ export const SearchClient = ({ setClient, setOfferModal }) => {
     }
   };
 
-  const token = localStorage.getItem("token");
   const handleSearchClients = async () => {
     setLoading(true);
 
@@ -41,7 +40,6 @@ export const SearchClient = ({ setClient, setOfferModal }) => {
         method: "GET",
         headers: {
           "Content-Type": "application/json",
-          // Authorization: `Bearer ${token}`,
         },
         credentials: "include",
       });
@@ -58,7 +56,7 @@ export const SearchClient = ({ setClient, setOfferModal }) => {
       );
 
       if (foundClient) {
-        const fieldsToDecrypt = ["firstName", "lastName", "email", "phone"];
+        const fieldsToDecrypt = ["first_name", "last_name", "email", "phone"];
         const decryptedClient = { ...foundClient };
 
         fieldsToDecrypt.forEach((field) => {

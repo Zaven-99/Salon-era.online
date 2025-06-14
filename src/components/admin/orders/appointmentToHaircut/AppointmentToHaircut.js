@@ -21,8 +21,8 @@ const AppointmentToHaircut = ({
   useForm({
     mode: "onChange",
     defaultValues: {
-      firstName: "",
-      lastName: "",
+      first_name: "",
+      last_name: "",
       phone: "",
       gender: "",
     },

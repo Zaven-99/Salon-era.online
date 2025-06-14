@@ -7,16 +7,16 @@ const ClientInfo = ({ client }) => {
   return (
     <div className={styles["client-info__inner"]}>
       <p>
-        <strong>Имя:</strong> {client.firstName || user.firstName}
+        <strong>Имя:</strong> {user.first_name || client.first_name}
       </p>
       <p>
-        <strong>Фамилия:</strong> {client.lastName || user.lastName}
+        <strong>Фамилия:</strong> {user.last_name || client.last_name}
       </p>
       <p>
-        <strong>Телефон:</strong> {client.phone || user.phone}
+        <strong>Телефон:</strong> {user.phone || client.phone}
       </p>
       <p>
-        <strong>Email:</strong> {client.email || user.email}
+        <strong>Email:</strong> {user.email || client.email }
       </p>
       <p>
         <strong>Пол:</strong> {user.gender === 0 ? "Женский" : "Мужской"}

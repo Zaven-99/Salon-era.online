@@ -74,11 +74,11 @@ const News = () => {
             />
 
             <textarea
-              name="mainText"
+              name="main_text"
               type="text"
               placeholder="Описание"
               className={styles["description"]}
-              {...register("mainText", {
+              {...register("main_text", {
                 required: "Это поле обязательно.",
                 minLength: {
                   value: 3,

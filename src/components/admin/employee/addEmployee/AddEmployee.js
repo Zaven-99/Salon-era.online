@@ -60,12 +60,12 @@ const AddEmployee = ({
     >
       <CustomInput
         label="Введите имя:"
-        error={errors.firstName}
+        error={errors.first_name}
         type="text"
-        name="firstName"
-        isActive={activeInput === "firstName"}
+        name="first_name"
+        isActive={activeInput === "first_name"}
         setActiveInput={setActiveInput}
-        {...register("firstName", {
+        {...register("first_name", {
           required: "Это поле обязательно.",
           minLength: {
             value: 3,
@@ -76,12 +76,12 @@ const AddEmployee = ({
 
       <CustomInput
         label="Введите фамилию:"
-        error={errors.lastName}
+        error={errors.last_name}
         type="text"
-        name="lastName"
-        isActive={activeInput === "lastName"}
+        name="last_name"
+        isActive={activeInput === "last_name"}
         setActiveInput={setActiveInput}
-        {...register("lastName", {
+        {...register("last_name", {
           required: "Это поле обязательно.",
           minLength: {
             value: 3,
@@ -196,11 +196,11 @@ const AddEmployee = ({
       <CustomInput
         label="Укажите дату трудоустройства"
         type="date"
-        error={errors.dateWorkIn}
-        name="dateWorkIn"
-        isActive={activeInput === "dateWorkIn"}
+        error={errors.date_work_in}
+        name="date_work_in"
+        isActive={activeInput === "date_work_in"}
         setActiveInput={setActiveInput}
-        {...register("dateWorkIn", {
+        {...register("date_work_in", {
           required: "Это поле обязательно",
         })}
       />
@@ -270,10 +270,10 @@ const AddEmployee = ({
           <div key={category.id}>
             <label className={styles.check}>
               <input
-                name="arrayTypeWork"
+                name="array_type_work"
                 type="checkbox"
                 value={category.id}
-                {...register("arrayTypeWork")}
+                {...register("array_type_work")}
               />
               {category.value}
             </label>

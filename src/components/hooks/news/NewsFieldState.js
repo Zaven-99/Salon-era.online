@@ -12,7 +12,7 @@ export const NewsFieldState = () => {
     mode: "onChange",
     defaultValues: {
       name: "",
-      mainText: "",
+      main_text: "",
     },
   });
 
@@ -36,7 +36,7 @@ export const NewsFieldState = () => {
         {
           id: formValues.id,
           name: formValues.name,
-          mainText: formValues.mainText,
+          main_text: formValues.main_text,
         },
       ])
     );
@@ -60,7 +60,6 @@ export const NewsFieldState = () => {
       setNews((prev) => [...prev, formData]);
 
       toggleClose();
-      
     } catch (error) {
       console.error(error);
     } finally {
@@ -68,7 +67,7 @@ export const NewsFieldState = () => {
       reset();
       setImagePreview(null);
       setSelectedFile(null);
-      setNews([])
+      setNews([]);
     }
   };
 

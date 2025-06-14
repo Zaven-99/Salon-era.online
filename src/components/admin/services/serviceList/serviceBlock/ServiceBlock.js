@@ -12,9 +12,9 @@ const ServiceBlock = ({ service, durationToText, getGenderText }) => {
       <div className={styles["service-item__inner"]}>
         <strong>Цена:</strong>{" "}
         <div>
-          {service.priceMax === null
-            ? `${service.priceLow} руб.`
-            : `${service.priceLow} - ${service.priceMax} руб.`}
+          {service.price_max === null
+            ? `${service.price_low} руб.`
+            : `${service.price_low} - ${service.price_max} руб.`}
         </div>
       </div>
       <div className={styles["service-item__inner"]}>

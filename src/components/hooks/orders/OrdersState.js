@@ -12,11 +12,15 @@ export const useOrdersState = () => {
   const [selectedDate, setSelectedDate] = useState(null);
   const [addOrderModal, setAddOrderModal] = useState(false);
 
+  const socketRef = useRef(null);
+  const reconnectTimeout = useRef(null);
+  const reconnectAttempts = useRef(0);
   const hasMounted = useRef(false);
   const initialLoadRef = useRef(true);
+  const isUnmounted = useRef(false);
   const dispatch = useDispatch();
   const notificationSound = useRef(new Audio("/sound.mp3"));
-
+  const errorTimeoutRef = useRef(null);
   // Ключ для AES
   const base64Key = "ECqDTm9UnVoFn2BD4vM2/Fgzda1470BvZo4t1PWAkuU=";
   const key = CryptoJS.enc.Base64.parse(base64Key);
@@ -107,20 +111,25 @@ export const useOrdersState = () => {
 
   // WebSocket подключение с useRef и экспоненциальным переподключением
   useEffect(() => {
-    const socketRef = { current: null };
-    let reconnectTimeout = null;
-    let reconnectAttempts = 0;
+    isUnmounted.current = false;
 
     const connect = () => {
+      if (isUnmounted.current) return;
+
       socketRef.current = new WebSocket(
         "wss://api.salon-era.ru/websocket/records"
       );
 
       socketRef.current.onopen = () => {
-        reconnectAttempts = 0;
         setError(null);
         setLoading(false);
-        console.log("WebSocket подключен");
+        reconnectAttempts.current = 0;
+
+        // Если ошибка была запланирована — отменяем
+        if (errorTimeoutRef.current) {
+          clearTimeout(errorTimeoutRef.current);
+          errorTimeoutRef.current = null;
+        }
       };
 
       socketRef.current.onmessage = async (event) => {
@@ -130,18 +139,21 @@ export const useOrdersState = () => {
 
           const decryptedOrders = await Promise.all(
             ordersArray.map(async (order) => {
-              if (order.clientFrom?.firstName && order.employeeTo?.firstName) {
+              if (
+                order.clientFrom?.first_name &&
+                order.employeeTo?.first_name
+              ) {
                 return {
                   ...order,
                   clientFrom: {
                     ...order.clientFrom,
-                    firstName: decryptField(order.clientFrom.firstName),
-                    lastName: decryptField(order.clientFrom.lastName),
+                    first_name: decryptField(order.clientFrom.first_name),
+                    last_name: decryptField(order.clientFrom.last_name),
                   },
                   employeeTo: {
                     ...order.employeeTo,
-                    firstName: decryptField(order.employeeTo.firstName),
-                    lastName: decryptField(order.employeeTo.lastName),
+                    first_name: decryptField(order.employeeTo.first_name),
+                    last_name: decryptField(order.employeeTo.last_name),
                   },
                 };
               }
@@ -164,8 +176,8 @@ export const useOrdersState = () => {
               newOrders.forEach((newOrder) => {
                 toast.info(
                   `Новый заказ от ${
-                    newOrder.clientFrom?.firstName || "Клиент"
-                  } ${newOrder.clientFrom?.lastName || ""}`
+                    newOrder.clientFrom?.first_name || "Клиент"
+                  } ${newOrder.clientFrom?.last_name || ""}`
                 );
                 notificationSound.current.play().catch(() => {});
               });
@@ -186,30 +198,45 @@ export const useOrdersState = () => {
       };
 
       socketRef.current.onerror = (err) => {
-        console.error("WebSocket ошибка:", err);
-        setError("Ошибка WebSocket");
+        // Отложенная проверка
+        if (!errorTimeoutRef.current) {
+          errorTimeoutRef.current = setTimeout(() => {
+            // Проверим: если сокет не открыт, показываем ошибку
+            if (
+              !socketRef.current ||
+              socketRef.current.readyState !== WebSocket.OPEN
+            ) {
+              console.error("WebSocket ошибка:", err);
+              setError("Ошибка WebSocket");
+            }
+            errorTimeoutRef.current = null;
+          }, 2000);
+        }
       };
 
       socketRef.current.onclose = () => {
-        reconnectAttempts++;
-        const timeout = Math.min(30000, 5000 * 2 ** reconnectAttempts); // max 30 сек
+        if (isUnmounted.current) return;
+        reconnectAttempts.current++;
+        const timeout = Math.min(30000, 5000 * 2 ** reconnectAttempts.current);
         console.log(
           `WebSocket закрыт, переподключение через ${timeout / 1000} секунд`
         );
-        reconnectTimeout = setTimeout(connect, timeout);
+        reconnectTimeout.current = setTimeout(connect, timeout);
       };
     };
 
     connect();
 
     return () => {
-      if (reconnectTimeout) clearTimeout(reconnectTimeout);
+      isUnmounted.current = true;
+      if (reconnectTimeout.current) clearTimeout(reconnectTimeout.current);
       if (
         socketRef.current &&
         (socketRef.current.readyState === WebSocket.OPEN ||
           socketRef.current.readyState === WebSocket.CONNECTING)
       ) {
         socketRef.current.close(1000, "Компонент размонтирован");
+        socketRef.current = null;
       }
     };
   }, [decryptField, dispatch]);

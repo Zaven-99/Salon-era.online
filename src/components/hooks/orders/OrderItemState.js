@@ -1,13 +1,11 @@
-import { useMemo, useCallback, useState } from "react";
+import { useCallback, useState } from "react";
 import { useDispatch } from "react-redux"; // Импортируем useDispatch для отправки экшенов
 import { removeOrder } from "../../../store/slices/orderSlice";
-export const OrderItemState = ({
-  // filteredOrders,
-  setOrders,
-  setError,
-  // formatDate,
-}) => {
+import CryptoJS from "crypto-js";
+
+export const OrderItemState = ({ setOrders, setError }) => {
   const dispatch = useDispatch();
+
   const [editingPriceId, setEditingPriceId] = useState(null);
   const [newPrice, setNewPrice] = useState("");
   const [loading, setLoading] = useState(false);
@@ -29,22 +27,69 @@ export const OrderItemState = ({
     [getHourText]
   );
 
-  const fetchOrderById = useCallback(async (id) => {
-    setLoading(true);
-    try {
-      const res = await fetch(`https://api.salon-era.ru/records/id?id=${id}`, {
-        method: "GET",
-        credentials: "include",
-      });
-      if (!res.ok) throw new Error(await res.text());
-      return await res.json();
-    } catch (err) {
-      console.warn("Ошибка при получении заказа:", err);
-      return null;
-    } finally {
-      setLoading(false);
-    }
-  }, []);
+  // Ключ для AES
+  const base64Key = "ECqDTm9UnVoFn2BD4vM2/Fgzda1470BvZo4t1PWAkuU=";
+  const key = CryptoJS.enc.Base64.parse(base64Key);
+  const decryptField = useCallback(
+    (encryptedValue) => {
+      if (!encryptedValue) return "";
+      try {
+        const decrypted = CryptoJS.AES.decrypt(encryptedValue, key, {
+          mode: CryptoJS.mode.ECB,
+          padding: CryptoJS.pad.Pkcs7,
+        });
+        return decrypted.toString(CryptoJS.enc.Utf8);
+      } catch {
+        return "Ошибка";
+      }
+    },
+    [key]
+  );
+
+  const fetchOrderById = useCallback(
+    async (id) => {
+      setLoading(true);
+      try {
+        const res = await fetch(
+          `https://api.salon-era.ru/records/id?id=${id}`,
+          {
+            method: "GET",
+            credentials: "include",
+          }
+        );
+        if (!res.ok) throw new Error(await res.text());
+
+        const encryptedData = await res.json();
+
+        // Расшифровываем нужные поля вручную
+        const decrypted = {
+          ...encryptedData,
+          clientFrom: {
+            ...encryptedData.clientFrom,
+            first_name: decryptField(encryptedData.clientFrom?.first_name),
+            last_name: decryptField(encryptedData.clientFrom?.last_name),
+          },
+          employeeTo: {
+            ...encryptedData.employeeTo,
+            first_name: decryptField(encryptedData.employeeTo?.first_name),
+            last_name: decryptField(encryptedData.employeeTo?.last_name),
+          },
+          service: {
+            ...encryptedData.service,
+            name: decryptField(encryptedData.service?.name),
+          },
+        };
+
+        return decrypted;
+      } catch (err) {
+        console.warn("Ошибка при получении заказа:", err);
+        return null;
+      } finally {
+        setLoading(false);
+      }
+    },
+    [decryptField]
+  );
 
   const updateOrderStatus = useCallback(
     async (order, status) => {
@@ -69,16 +114,12 @@ export const OrderItemState = ({
         if (!updated) throw new Error("Не удалось загрузить обновлённый заказ");
 
         setOrders((prev) =>
-          prev.map((o) =>
-            o.record.id === updated.id ? { ...o, record: updated } : o
-          )
+          prev.map((o) => (o.record.id === updated.record.id ? updated : o))
         );
       } catch (error) {
         setError(error.message || "Неизвестная ошибка");
       } finally {
         setLoading(false);
-
-        window.location.reload();
       }
     },
     [setOrders, setError, fetchOrderById]
@@ -106,9 +147,7 @@ export const OrderItemState = ({
         if (!updated) throw new Error("Не удалось загрузить обновлённый заказ");
 
         setOrders((prev) =>
-          prev.map((o) =>
-            o.record.id === updated.id ? { ...o, record: updated } : o
-          )
+          prev.map((o) => (o.record.id === updated.record.id ? updated : o))
         );
       } catch (error) {
         setError(error.message || "Ошибка при обновлении цены");
@@ -128,7 +167,7 @@ export const OrderItemState = ({
   const closeOrder = useCallback(
     (order) => {
       updateOrderStatus(order, 500);
-      dispatch(removeOrder(order.record.id)); // Удаляем заказ из Redux
+      dispatch(removeOrder(order.record.id));  
     },
     [updateOrderStatus, dispatch]
   );
@@ -136,35 +175,16 @@ export const OrderItemState = ({
   const cancelOrder = useCallback(
     (order) => {
       updateOrderStatus(order, 400);
-      dispatch(removeOrder(order.record.id)); // Удаляем заказ из Redux
+      dispatch(removeOrder(order.record.id)); 
     },
     [updateOrderStatus, dispatch]
   );
-
-  // const groupOrdersByDate = useCallback(
-  //   (orders) =>
-  //     orders.reduce((acc, order) => {
-  //       if (order.record?.status !== 400 && order.record?.status !== 500) {
-  //         const date = formatDate(order.record?.date_record).split(",")[0];
-  //         if (!acc[date]) acc[date] = [];
-  //         acc[date].push(order);
-  //       }
-  //       return acc;
-  //     }, {}),
-  //   [formatDate]
-  // );
-
-  // const groupedOrders = useMemo(
-  //   () => groupOrdersByDate(filteredOrders),
-  //   [filteredOrders, groupOrdersByDate]
-  // );
 
   return {
     durationToText,
     acceptOrder,
     closeOrder,
     cancelOrder,
-    // groupedOrders,
     editingPriceId,
     setEditingPriceId,
     newPrice,

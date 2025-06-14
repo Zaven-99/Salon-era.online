@@ -22,8 +22,8 @@ const ClientBlock = ({
   useForm({
     mode: "onChange",
     defaultValues: {
-      firstName: "",
-      lastName: "",
+      first_name: "",
+      last_name: "",
       phone: "",
       gender: "",
     },

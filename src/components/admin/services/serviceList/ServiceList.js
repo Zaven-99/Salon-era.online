@@ -30,7 +30,7 @@ const ServiceList = ({
       priceLow: null,
       priceMax: null,
       gender: "",
-      imageLink: "",
+      image_link: "",
     },
   });
 

@@ -17,8 +17,8 @@ export const SignUpBlockState = ({
   } = useForm({
     mode: "onChange",
     defaultValues: {
-      firstName: "",
-      lastName: "",
+      first_name: "",
+      last_name: "",
       email: "",
       phone: "",
       gender: "",
@@ -84,8 +84,8 @@ export const SignUpBlockState = ({
 
       const userPayload = {
         id: data.id,
-        firstName: data.firstName,
-        lastName: data.lastName,
+        first_name: data.first_name,
+        last_name: data.last_name,
         login: data.login,
         email: data.email,
         phone: data.phone,
@@ -102,7 +102,6 @@ export const SignUpBlockState = ({
       toggleCloseOfferModal();
     } catch (error) {
       let status = null;
-      let raw = error.message;
 
       try {
         const parsed = JSON.parse(error.message);

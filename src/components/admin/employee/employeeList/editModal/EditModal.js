@@ -58,14 +58,14 @@ const EditModal = ({
       <h2>Редактировать</h2>
       <CustomInput
         label="Введите имя:"
-        error={errors.firstName}
+        error={errors.first_name}
         type="text"
-        name="firstName"
-        value={editedEmployee.firstName}
+        name="first_name"
+        value={editedEmployee.first_name}
         handleChange={handleChange}
-        isActive={activeInput === "firstName"}
+        isActive={activeInput === "first_name"}
         setActiveInput={setActiveInput}
-        {...register("firstName", {
+        {...register("first_name", {
           minLength: {
             value: 3,
             message: "Имя должен содержать минимум 3 символа.",
@@ -75,14 +75,14 @@ const EditModal = ({
 
       <CustomInput
         label="Введите фамилию:"
-        error={errors.lastName}
+        error={errors.last_name}
         type="text"
-        name="lastName"
-        value={editedEmployee.lastName}
+        name="last_name"
+        value={editedEmployee.last_name}
         handleChange={handleChange}
-        isActive={activeInput === "lastName"}
+        isActive={activeInput === "last_name"}
         setActiveInput={setActiveInput}
-        {...register("lastName", {
+        {...register("last_name", {
           minLength: {
             value: 3,
             message: "Фамилия должен содержать минимум 3 символа.",
@@ -204,14 +204,14 @@ const EditModal = ({
       <h5 className={styles["choose-category"]}>
         Выберите категорию услуг для мастера
       </h5>
-      <div className={styles.arrayTypeWork}>
+      <div className={styles.array_type_work}>
         {categories.map((category) => (
           <label key={category.id}>
             <input
               type="checkbox"
-              name="arrayTypeWork"
+              name="array_type_work"
               value={category.id}
-              checked={editedEmployee.arrayTypeWork.includes(category.id)}
+              checked={editedEmployee.array_type_work.includes(category.id)}
               onChange={(e) => handleCategoryChange(e, category.id)}
             />
             {category.value}

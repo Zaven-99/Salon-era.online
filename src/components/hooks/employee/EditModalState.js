@@ -15,15 +15,15 @@ export const EditModalState = ({
   } = useForm({
     mode: "onChange",
     defaultValues: {
-      firstName: "",
-      lastName: "",
+      first_name: "",
+      last_name: "",
       login: "",
       password: "",
       confirmPassword: "",
       email: "",
       phone: "",
       position: "",
-      dateWorkIn: "",
+      date_work_in: "",
       gender: "",
       role: "USER",
     },
@@ -38,7 +38,7 @@ export const EditModalState = ({
   const fetchCategory = async () => {
     try {
       const response = await fetch(
-        "https://api.salon-era.ru/catalogs/all/filter?field=category&state=eq&value=должность",
+        "https://api.salon-era.ru/catalogs/all/filter?field=category&state=eq&value=Категория услуг",
         {
           method: "GET",
           credentials: "include",
@@ -67,9 +67,9 @@ export const EditModalState = ({
     const { checked } = e.target;
     setEditedEmployee((prev) => ({
       ...prev,
-      arrayTypeWork: checked
-        ? [...prev.arrayTypeWork, categoryId]
-        : prev.arrayTypeWork.filter((id) => id !== categoryId),
+      array_type_work: checked
+        ? [...prev.array_type_work, categoryId]
+        : prev.array_type_work.filter((id) => id !== categoryId),
     }));
   };
 
@@ -91,7 +91,6 @@ export const EditModalState = ({
 
     const serviceToUpdate = { ...editedEmployee, id };
 
-     
     if (employee?.login === editedEmployee.login) {
       delete serviceToUpdate.login;
     }

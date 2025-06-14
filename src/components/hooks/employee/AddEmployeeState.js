@@ -13,18 +13,18 @@ export const AddEmployeeState = ({ setEmployee, toggleClose }) => {
   } = useForm({
     mode: "onChange",
     defaultValues: {
-      firstName: "",
-      lastName: "",
+      first_name: "",
+      last_name: "",
       login: "",
       password: "",
       confirmPassword: "",
       email: "",
       phone: "",
       position: "1",
-      dateWorkIn: "",
+      date_work_in: "",
       gender: "",
-      imageLink: "",
-      arrayTypeWork: [],
+      image_link: "",
+      array_type_work: [],
       role: "USER",
     },
   });
@@ -63,7 +63,7 @@ export const AddEmployeeState = ({ setEmployee, toggleClose }) => {
   const fetchCategroy = async () => {
     try {
       const res = await fetch(
-        "https://api.salon-era.ru/catalogs/all/filter?field=category&state=eq&value=должность",
+        "https://api.salon-era.ru/catalogs/all/filter?field=category&state=eq&value=Категория услуг",
         {
           method: "GET",
           credentials: "include",
@@ -85,7 +85,7 @@ export const AddEmployeeState = ({ setEmployee, toggleClose }) => {
 
   const onSubmit = async (formValues) => {
     const { confirmPassword, ...dataToSend } = formValues;
-    const dateWorkIn = new Date(formValues.dateWorkIn);
+    const date_work_in = new Date(formValues.date_work_in);
 
     const formData = new FormData();
 
@@ -94,9 +94,9 @@ export const AddEmployeeState = ({ setEmployee, toggleClose }) => {
       JSON.stringify([
         {
           ...dataToSend,
-          dateWorkIn: dateWorkIn.toISOString().slice(0, -1),
+          date_work_in: date_work_in.toISOString().slice(0, -1),
           role: "USER",
-          arrayTypeWork: formValues.arrayTypeWork,
+          array_type_work: formValues.array_type_work,
         },
       ])
     );

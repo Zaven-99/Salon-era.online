@@ -30,18 +30,21 @@ export const AppointmentToHaircutState = ({ setAddOrderModal }) => {
   const base64Key = "ECqDTm9UnVoFn2BD4vM2/Fgzda1470BvZo4t1PWAkuU=";
   const key = CryptoJS.enc.Base64.parse(base64Key);
 
-  const decryptField = (encryptedValue) => {
-    try {
-      const decrypted = CryptoJS.AES.decrypt(encryptedValue, key, {
-        mode: CryptoJS.mode.ECB,
-        padding: CryptoJS.pad.Pkcs7,
-      });
-      return decrypted.toString(CryptoJS.enc.Utf8);
-    } catch (e) {
-      console.error("Ошибка при расшифровке:", e);
-      return "Ошибка расшифровки";
-    }
-  };
+  const decryptField = useCallback(
+      (encryptedValue) => {
+        if (!encryptedValue) return "";
+        try {
+          const decrypted = CryptoJS.AES.decrypt(encryptedValue, key, {
+            mode: CryptoJS.mode.ECB,
+            padding: CryptoJS.pad.Pkcs7,
+          });
+          return decrypted.toString(CryptoJS.enc.Utf8);
+        } catch {
+          return "Ошибка";
+        }
+      },
+      [key]
+    );
 
   useEffect(() => {
     const fetchData = async () => {
@@ -49,11 +52,11 @@ export const AppointmentToHaircutState = ({ setAddOrderModal }) => {
         const [barbersResponse, categoriesResponse] = await Promise.all([
           fetch("https://api.salon-era.ru/employees/all", {
             method: "GET",
-            credentials: "include", // ✅ куки будут отправлены
+            credentials: "include",  
           }),
           fetch("https://api.salon-era.ru/catalogs/all", {
             method: "GET",
-            credentials: "include", // ✅ куки будут отправлены
+            credentials: "include", 
           }),
         ]);
 
@@ -65,7 +68,7 @@ export const AppointmentToHaircutState = ({ setAddOrderModal }) => {
         const categoriesData = await categoriesResponse.json();
 
         const decryptedData = barbersData.map((employee) => {
-          const fieldsToDecrypt = ["lastName", "firstName"];
+          const fieldsToDecrypt = ["last_name", "first_name"];
           const decryptedEmployee = { ...employee };
 
           fieldsToDecrypt.forEach((field) => {
@@ -91,16 +94,22 @@ export const AppointmentToHaircutState = ({ setAddOrderModal }) => {
     if (selectedServices.length === 0) return [];
 
     return barbers.filter((barber) => {
-      if (!Array.isArray(barber.arrayTypeWork) || barber.role === "EMPLOYEE")
+      if (!Array.isArray(barber.array_type_work) || barber.role === "USER")
         return false;
+
       const selectedCategoryIds = selectedServices.map(
         (service) => service.category
       );
-      return !barber.arrayTypeWork.some((id) =>
+
+      // Оставить только тех, кто умеет выполнять хотя бы одну из выбранных категорий
+      return barber.array_type_work.some((id) =>
         selectedCategoryIds.includes(id)
       );
     });
   }, [barbers, selectedServices]);
+  
+
+  
 
   const getCategoryTextById = (id) => {
     const categoryId = Number(id);
@@ -151,10 +160,6 @@ export const AppointmentToHaircutState = ({ setAddOrderModal }) => {
       ])
     );
 
-    for (let pair of formData.entries()) {
-      console.log(pair[0] + ": " + pair[1]);
-    }
-
     try {
       const response = await fetch("https://api.salon-era.ru/records", {
         method: "POST",
@@ -172,8 +177,8 @@ export const AppointmentToHaircutState = ({ setAddOrderModal }) => {
 
       const userPayload = {
         id: data.id,
-        firstName: encryptField(data.firstName),
-        lastName: encryptField(data.lastName),
+        first_name: encryptField(data.first_name),
+        last_name: encryptField(data.last_name),
         login: encryptField(data.login),
         email: encryptField(data.email),
         phone: encryptField(data.phone),

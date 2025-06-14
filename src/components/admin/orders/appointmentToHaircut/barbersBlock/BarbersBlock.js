@@ -38,7 +38,7 @@ const BarbersBlock = ({ barbers, loading, selectedCategory }) => {
               key={item.id}
             >
               <p>
-                {item.firstName} {item.lastName}
+                {item.first_name} {item.last_name}
               </p>
             </div>
           ))}

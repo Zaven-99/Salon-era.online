@@ -99,7 +99,7 @@ const HeaderSlidesList = ({ setSlides, slides, toggleOpen, toggleClose }) => {
             ) : (
               <>
                 <div>
-                  <img src={slides.imageLink} alt={slides.title} />
+                  <img src={slides.image_link} alt={slides.title} />
                 </div>
                 <div className={styles.name}>
                   <p>{slides.name}</p>

@@ -47,6 +47,10 @@ export const AddPositionState = ({ toggleClose }) => {
       toggleClose();
     } catch (error) {
       console.error("Ошибка при добавлении:", error);
+      const errorData = JSON.parse(error.message || "{}");
+      const errorDetails = JSON.parse(errorData.message || "{}");
+      const errorCode = errorDetails.errorCode;
+      console.log(errorCode);
     } finally {
       setLoading(false);
       window.location.reload();

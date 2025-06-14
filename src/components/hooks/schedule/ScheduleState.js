@@ -102,9 +102,9 @@ export const ScheduleState = () => {
       "clientData",
       JSON.stringify([
         {
-          idEmployee: selectedCell.employeeId,
-          scheludeDateStart: formattedStartTime,
-          scheludeDateEnd: formattedEndTime,
+          id_employee: selectedCell.employeeId,
+          schelude_date_start: formattedStartTime,
+          schelude_date_end: formattedEndTime,
         },
       ])
     );
@@ -121,7 +121,7 @@ export const ScheduleState = () => {
       setSelectedCells((prev) => ({
         ...prev,
         [`${formValues.employeeIndex}-${formValues.dayIndex}`]: {
-          idEmployee: formValues.idEmployee,
+          id_employee: formValues.id_employee,
           startTime: formattedStartTime,
           endTime: formattedEndTime,
         },
@@ -177,7 +177,7 @@ export const ScheduleState = () => {
       const data = await response.json();
 
       const decryptedData = data.map((employee) => {
-        const fieldsToDecrypt = ["lastName", "firstName"];
+        const fieldsToDecrypt = ["last_name", "first_name"];
         const decryptedEmployee = { ...employee };
 
         fieldsToDecrypt.forEach((field) => {
@@ -211,16 +211,16 @@ export const ScheduleState = () => {
 
       const updatedCells = {};
       data.forEach((item) => {
-        const dateStart = new Date(item.scheludeDateStart);
+        const dateStart = new Date(item.schelude_date_start);
         const dayIndex = getDaysOfWeek(currentDate).findIndex((day) => {
           return new Date(day.date).toDateString() === dateStart.toDateString();
         });
 
         if (dayIndex !== -1) {
-          updatedCells[`${item.idEmployee}-${dayIndex}`] = {
-            idEmployee: item.id,
-            startTime: item.scheludeDateStart,
-            endTime: item.scheludeDateEnd,
+          updatedCells[`${item.id_employee}-${dayIndex}`] = {
+            id_employee: item.id,
+            startTime: item.schelude_date_start,
+            endTime: item.schelude_date_end,
           };
         }
 
@@ -257,7 +257,7 @@ export const ScheduleState = () => {
       setSelectedCells((prev) => {
         const updated = { ...prev };
         const keyToDelete = Object.keys(updated).find(
-          (key) => updated[key]?.idEmployee === id
+          (key) => updated[key]?.id_employee === id
         );
         if (keyToDelete) delete updated[keyToDelete];
         return updated;
@@ -291,10 +291,10 @@ export const ScheduleState = () => {
       "clientData",
       JSON.stringify({
         id: selectedCells[`${selectedCell.employeeId}-${selectedCell.dayIndex}`]
-          ?.idEmployee,
-        idEmployee: selectedCell.employeeId,
-        scheludeDateStart: formattedStartTime,
-        scheludeDateEnd: formattedEndTime,
+          ?.id_employee,
+        id_employee: selectedCell.employeeId,
+        schelude_date_start: formattedStartTime,
+        schelude_date_end: formattedEndTime,
       })
     );
 
@@ -314,7 +314,7 @@ export const ScheduleState = () => {
       setSelectedCells((prev) => ({
         ...prev,
         [`${selectedCell.employeeId}-${selectedCell.dayIndex}`]: {
-          idEmployee: selectedCell.employeeId,
+          id_employee: selectedCell.employeeId,
           startTime: formattedStartTime,
           endTime: formattedEndTime,
         },

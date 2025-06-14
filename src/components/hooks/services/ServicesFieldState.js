@@ -6,8 +6,8 @@ export const ServiceFieldState = () => {
     mode: "onChange",
     defaultValues: {
       name: "",
-      priceLow: "",
-      priceMax: "",
+      price_low: "",
+      price_max: "",
       category: "",
       description: "",
       duration: null,

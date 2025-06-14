@@ -1,14 +1,12 @@
 import { useForm } from "react-hook-form";
- 
-export const useEditFormState = ({
 
+export const useEditFormState = ({
   setLoading,
   editedClient,
   setEditedClient,
   setClientId,
   activeInput,
   setActiveInput,
- 
 }) => {
   const {
     register,
@@ -17,8 +15,8 @@ export const useEditFormState = ({
   } = useForm({
     mode: "onChange",
     defaultValues: {
-      firstName: "",
-      lastName: "",
+      first_name: "",
+      last_name: "",
       phone: "",
       gender: "",
     },
@@ -42,8 +40,8 @@ export const useEditFormState = ({
         login: null,
         password: null,
         dateBirthday: null,
-        dateWorkIn: null,
-        dateWorkOut: null,
+        date_work_in: null,
+        date_work_out: null,
         position: null,
         description: null,
       })
@@ -76,7 +74,7 @@ export const useEditFormState = ({
     setEditedClient,
     activeInput,
     setActiveInput,
-   
+
     setClientId,
     register,
     control,

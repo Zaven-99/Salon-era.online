@@ -12,7 +12,7 @@ export const EditHeaderSlidesState = () => {
     mode: "onChange",
     defaultValues: {
       name: "",
-      mainText: "",
+      main_text: "",
     },
   });
 
@@ -29,10 +29,8 @@ export const EditHeaderSlidesState = () => {
   const deletImagePreview = () => setImagePreview(null);
 
   const uploadImage = async (event) => {
- 
     const result = await compressAndPreviewImage(event, {}, setLoading);
     if (result) {
- 
       setSelectedFile(result.compressedFile);
       setImagePreview(result.dataUrl);
     }

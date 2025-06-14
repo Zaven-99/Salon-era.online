@@ -14,7 +14,7 @@ const ServiceField = () => {
     handleSubmit,
 
     setServices,
-    loading,
+  
     addService,
     activeInput,
     setActiveInput,

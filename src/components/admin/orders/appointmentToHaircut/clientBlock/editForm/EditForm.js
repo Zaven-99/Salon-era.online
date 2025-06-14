@@ -28,14 +28,14 @@ const EditForm = ({
       <h2>Редактировать</h2>
       <CustomInput
         label="Введите имя:"
-        error={errors.firstName}
+        error={errors.first_name}
         type="text"
-        name="firstName"
-        value={editedClient.firstName}
+        name="first_name"
+        value={editedClient.first_name}
         handleChange={handleChange}
-        isActive={activeInput === "firstName"}
+        isActive={activeInput === "first_name"}
         setActiveInput={setActiveInput}
-        {...register("firstName", {
+        {...register("first_name", {
           required: "Это поле обязательно.",
           minLength: {
             value: 3,
@@ -46,14 +46,14 @@ const EditForm = ({
 
       <CustomInput
         label="Введите фамилию:"
-        error={errors.lastName}
+        error={errors.last_name}
         type="text"
-        name="lastName"
-        value={editedClient.lastName}
+        name="last_name"
+        value={editedClient.last_name}
         handleChange={handleChange}
-        isActive={activeInput === "lastName"}
+        isActive={activeInput === "last_name"}
         setActiveInput={setActiveInput}
-        {...register("lastName", {
+        {...register("last_name", {
           required: "Это поле обязательно.",
           minLength: {
             value: 3,

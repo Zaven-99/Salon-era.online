@@ -1,7 +1,6 @@
 import React from "react";
 
 import styles from "./table.module.scss";
-import Spinner from "../../../spinner/Spinner";
 
 const Table = ({
   setSelectedCell,
@@ -50,7 +49,7 @@ const Table = ({
         {employee.map((item, index) => (
           <tr key={index}>
             <td>
-              {item.firstName} {item.lastName}
+              {item.first_name} {item.last_name}
             </td>
             {daysOfWeek.map((dayObj, dayIndex) => {
               const cellKey = `${item.id}-${dayIndex}`;

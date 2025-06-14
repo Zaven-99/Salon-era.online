@@ -93,10 +93,10 @@ const EmployeeList = ({
                 ) : (
                   <>
                     <div className={styles["employee-item__inner"]}>
-                      {employee.imageLink ? (
+                      {employee.image_link ? (
                         <img
                           className={styles["image-employee"]}
-                          src={employee.imageLink}
+                          src={employee.image_link}
                           alt=""
                         />
                       ) : (

@@ -12,37 +12,36 @@ export const EmployeeListState = (setEmployee) => {
   const base64Key = "ECqDTm9UnVoFn2BD4vM2/Fgzda1470BvZo4t1PWAkuU=";
   const key = CryptoJS.enc.Base64.parse(base64Key);
 
-  const decryptField = (encryptedValue) => {
-    try {
-      const decrypted = CryptoJS.AES.decrypt(encryptedValue, key, {
-        mode: CryptoJS.mode.ECB,
-        padding: CryptoJS.pad.Pkcs7,
-      });
-      return decrypted.toString(CryptoJS.enc.Utf8);
-    } catch (e) {
-      console.error("Ошибка при расшифровке:", e);
-      return "Ошибка расшифровки";
-    }
-  };
-
+  const decryptField = useCallback(
+    (encryptedValue) => {
+      if (!encryptedValue) return "";
+      try {
+        const decrypted = CryptoJS.AES.decrypt(encryptedValue, key, {
+          mode: CryptoJS.mode.ECB,
+          padding: CryptoJS.pad.Pkcs7,
+        });
+        return decrypted.toString(CryptoJS.enc.Utf8);
+      } catch {
+        return "Ошибка";
+      }
+    },
+    [key]
+  );
   const fetchEmployee = useCallback(async () => {
     setLoading(true);
     try {
-      const response = await fetch(
-        "https://api.salon-era.ru/employees/role?role=USER",
-        {
-          method: "GET",
-          credentials: "include",
-        }
-      );
+      const response = await fetch("https://api.salon-era.ru/employees/all", {
+        method: "GET",
+        credentials: "include",
+      });
       if (!response.ok) throw new Error("Ошибка при получении сотрудников");
 
       const data = await response.json();
 
       const decryptedData = data.map((employee) => {
         const fieldsToDecrypt = [
-          "firstName",
-          "lastName",
+          "first_name",
+          "last_name",
           "password",
           "email",
           "phone",
@@ -63,7 +62,9 @@ export const EmployeeListState = (setEmployee) => {
         new Map(decryptedData.map((item) => [item.id, item])).values()
       );
 
-      setEmployee(uniqueData);
+      const filterData = uniqueData.filter((item) => item.login !== "admin");
+
+      setEmployee(filterData);
     } catch (error) {
       console.error("Ошибка при загрузке сотрудников:", error);
     } finally {

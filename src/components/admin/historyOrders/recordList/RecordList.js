@@ -8,7 +8,7 @@
 //   const ordersPerPage = 5;
 
 //   const sortedOrders = [...orders].sort(
-//     (a, b) => new Date(b.record.dateRecord) - new Date(a.record.dateRecord)
+//     (a, b) => new Date(b.record.date_record) - new Date(a.record.date_record)
 //   );
 
 //   const totalPages = Math.ceil(sortedOrders.length / ordersPerPage);
@@ -35,7 +35,7 @@
 //               <strong>Клиент:</strong>
 //               <div>
 //                 {order.clientFrom
-//                   ? `${order.clientFrom.firstName} ${order.clientFrom.lastName}`
+//                   ? `${order.clientFrom.first_name} ${order.clientFrom.last_name}`
 //                   : "Неизвестный клиент"}
 //               </div>
 //             </div>
@@ -44,7 +44,7 @@
 //               <strong>Парикмахер:</strong>
 //               <div>
 //                 {order.employeeTo
-//                   ? `${order.employeeTo.firstName} ${order.employeeTo.lastName}`
+//                   ? `${order.employeeTo.first_name} ${order.employeeTo.last_name}`
 //                   : "Неизвестный парикмахер"}
 //               </div>
 //             </div>
@@ -128,7 +128,6 @@
 
 // export default RecordList;
 
-
 import React from "react";
 import CustomButton from "../../../customButton/CustomButton";
 
@@ -154,7 +153,7 @@ const RecordList = ({
               <strong>Клиент:</strong>
               <div>
                 {order.clientFrom
-                  ? `${order.clientFrom.firstName} ${order.clientFrom.lastName}`
+                  ? `${order.clientFrom.first_name} ${order.clientFrom.last_name}`
                   : "Неизвестный клиент"}
               </div>
             </div>
@@ -163,7 +162,7 @@ const RecordList = ({
               <strong>Парикмахер:</strong>
               <div>
                 {order.employeeTo
-                  ? `${order.employeeTo.firstName} ${order.employeeTo.lastName}`
+                  ? `${order.employeeTo.first_name} ${order.employeeTo.last_name}`
                   : "Неизвестный парикмахер"}
               </div>
             </div>

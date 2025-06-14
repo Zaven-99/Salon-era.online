@@ -95,8 +95,8 @@ const ServicesBlock = ({
                         <option value="">Выберите услугу</option>
                         {genderServices[category].map((item, index) => (
                           <option key={index} value={item.id}>
-                            {item.name} - {item.priceLow} 
-                            {item.priceMax ? `- ${item.priceMax}` : ''} руб.
+                            {item.name} - {item.price_low} 
+                            {item.price_max ? `- ${item.price_max}` : ''} руб.
                           </option>
                         ))}
                       </select>

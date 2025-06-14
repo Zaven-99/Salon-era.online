@@ -24,8 +24,8 @@ const NewsList = ({ news, setNews, toggleOpen, toggleClose }) => {
     mode: "onChange",
     defaultValues: {
       name: "",
-      mainText: "",
-      imageLink: "",
+      main_text: "",
+      image_link: "",
     },
   });
 

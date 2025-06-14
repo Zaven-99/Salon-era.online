@@ -10,7 +10,7 @@ export const EmployeeFieldState = () => {
   const fetchPosition = async () => {
     try {
       const response = await fetch(
-        "https://api.salon-era.ru/catalogs/all/filter?field=category&state=eq&value=должность",{
+        "https://api.salon-era.ru/catalogs/all/filter?field=category&state=eq&value=Должность",{
           method:"GET",
           credentials: "include",
         }

@@ -12,17 +12,17 @@ const EmployeeField = () => {
   useForm({
     mode: "onChange",
     defaultValues: {
-      firstName: "",
-      lastName: "",
+      first_name: "",
+      last_name: "",
       login: "",
       password: "",
       confirmPassword: "",
       email: "",
       phone: "",
       position: "1",
-      dateWorkIn: "",
+      date_work_in: "",
       gender: "",
-      imageLink: "",
+      image_link: "",
       role: "USER",
     },
   });

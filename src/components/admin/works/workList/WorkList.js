@@ -115,7 +115,7 @@ const WorkList = ({ setWorks, categories, toggleOpen, toggleClose, works }) => {
                   ) : (
                     <>
                       <div>
-                        <img src={work.imageLink} alt="" />
+                        <img src={work.image_link} alt="" />
                       </div>
                     </>
                   )}
