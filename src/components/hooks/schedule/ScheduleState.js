@@ -197,6 +197,7 @@ export const ScheduleState = () => {
   };
 
   const fetchClientSchedule = async () => {
+    setLoading(true);
     try {
       const response = await fetch(
         "https://api.salon-era.ru/clientsschelude/all",
@@ -230,6 +231,8 @@ export const ScheduleState = () => {
       setSelectedCells(updatedCells);
     } catch (error) {
       console.error(error);
+    }finally{
+      setLoading(false);
     }
   };
 
@@ -361,5 +364,6 @@ export const ScheduleState = () => {
     }),
     handleDelete,
     handleUpdate,
+    setLoading,
   };
 };

@@ -74,7 +74,7 @@ const HeaderAdminPanel = () => {
             <li className={styles["orders"]}>
               Заказы
               <span className={styles["create-orders"]}>
-                <p className={styles["order-length"]}>{orders.length}</p>
+                <p className={styles["order-length"]}>{orders.length || 0}</p>
               </span>
             </li>
           </NavLink>

@@ -72,9 +72,7 @@ const SignUpBlock = ({
           },
         })}
       />
-      {errorMessages && errorMessages.phone && (
-        <p className={styles.error}>{errorMessages.phone}</p>
-      )}
+      <p className={styles["error-message"]}>{errorMessages.phone}</p>
       <CustomInput
         label="Введите номер телефона:"
         onKeyDown={handleKeyDown}

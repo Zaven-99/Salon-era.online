@@ -1,4 +1,4 @@
- import { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import CryptoJS from "crypto-js";
 
 export const HistoryOrdersState = () => {
@@ -8,10 +8,12 @@ export const HistoryOrdersState = () => {
   const [selectedDate, setSelectedDate] = useState(null);
   const [page, setPage] = useState(1);
   const [totalPages, setTotalPages] = useState(1);
-
+  const [hasNextPage, setHasNextPage] = useState(true);
+  const pageSize = 10;
   const base64Key = "ECqDTm9UnVoFn2BD4vM2/Fgzda1470BvZo4t1PWAkuU=";
   const key = CryptoJS.enc.Base64.parse(base64Key);
 
+  // Функция дешифровки поля
   const decryptField = (encryptedValue) => {
     try {
       const decrypted = CryptoJS.AES.decrypt(encryptedValue, key, {
@@ -25,6 +27,7 @@ export const HistoryOrdersState = () => {
     }
   };
 
+  // Функция дешифровки заказа
   const decryptOrder = (order) => {
     const decryptedOrder = { ...order };
 
@@ -50,6 +53,8 @@ export const HistoryOrdersState = () => {
   useEffect(() => {
     const fetchData = async () => {
       setLoading(true);
+      setError(null);
+
       try {
         const response = await fetch(
           `https://api.salon-era.ru/records/all?page=${page}`,
@@ -65,10 +70,6 @@ export const HistoryOrdersState = () => {
         }
 
         const data = await response.json();
-        console.log(data);
-        // Если API возвращает структуру с данными и количеством страниц
-        // например { records: [...], totalPages: n }
-        // подстрой под свой API
 
         const decryptedData = data.records
           ? data.records.map(decryptOrder)
@@ -81,15 +82,18 @@ export const HistoryOrdersState = () => {
 
         setOrders(decryptedData);
 
-        // Если API возвращает totalPages
         if (data.totalPages) {
           setTotalPages(data.totalPages);
+          setHasNextPage(page < data.totalPages);
         } else {
-          // Если нет, вычисляем вручную на основе общего кол-ва и размера страницы
-          // например: setTotalPages(Math.ceil(data.totalCount / pageSize))
+          setHasNextPage(decryptedData.length === pageSize);
+          setTotalPages(1); // Если totalPages нет, оставляем 1
         }
       } catch (error) {
         setError(error.message);
+        setOrders([]);
+        setHasNextPage(false);
+        setTotalPages(1);
       } finally {
         setLoading(false);
       }
@@ -97,22 +101,27 @@ export const HistoryOrdersState = () => {
 
     fetchData();
   }, [page]);
-  
 
+  // Переход на следующую страницу
   const nextPage = () => {
-    setPage((prev) => (prev < totalPages ? prev + 1 : prev));
+    if (hasNextPage) {
+      setPage((prev) => prev + 1);
+    }
   };
 
+  // Переход на предыдущую страницу
   const prevPage = () => {
     setPage((prev) => (prev > 1 ? prev - 1 : prev));
   };
 
+  // Переход на конкретную страницу
   const goToPage = (pageNumber) => {
     if (pageNumber >= 1 && pageNumber <= totalPages) {
       setPage(pageNumber);
     }
   };
 
+  // Форматирование даты в удобочитаемый вид
   const formatDate = (date) => {
     const options = {
       year: "numeric",
@@ -125,6 +134,7 @@ export const HistoryOrdersState = () => {
     return new Date(date).toLocaleString("ru-RU", options);
   };
 
+  // Фильтрация заказов по выбранной дате (если она есть)
   const filteredOrders =
     selectedDate && selectedDate instanceof Date
       ? orders.filter((order) => {
@@ -133,6 +143,7 @@ export const HistoryOrdersState = () => {
         })
       : orders;
 
+  // Подсчет общей суммы по фильтрованным заказам, кроме со статусом 400
   const calculateTotal = () => {
     return filteredOrders
       .filter((o) => o.record?.status !== 400)
@@ -152,5 +163,6 @@ export const HistoryOrdersState = () => {
     goToPage,
     currentPage: page,
     totalPages,
+    hasNextPage,
   };
 };

@@ -64,7 +64,7 @@ export const SignUpBlockState = ({
     );
 
     try {
-      setLoading(true);
+      // setLoading(true);
 
       const response = await fetch("https://api.salon-era.ru/clients", {
         method: "POST",
@@ -75,9 +75,10 @@ export const SignUpBlockState = ({
       const data = await response.json();
 
       if (!response.ok) {
-        throw new Error(
-          JSON.stringify({ message: data, status: response.status })
-        );
+        const error = new Error("Ошибка при регистрации");
+        error.responseData = data; // <-- сохраняем в отдельное поле
+        error.status = response.status;
+        throw error;
       }
 
       setClient(data);
@@ -101,24 +102,28 @@ export const SignUpBlockState = ({
       reset();
       toggleCloseOfferModal();
     } catch (error) {
-      let status = null;
-
       try {
-        const parsed = JSON.parse(error.message);
-        status = parsed.status;
-      } catch {
-        console.error("Ошибка запроса:", error.message);
-      }
+        const errorDetails = error.responseData;
 
-      if (status === 442) {
+        const errorCode = errorDetails?.errorCode;
+        console.log(errorCode)
+        if (errorCode === "206") {
+          setErrorMessages((prev) => ({
+            ...prev,
+            phone: `Пользователь с номером ${formValues.phone} уже существует`,
+          }));
+        } else {
+          setErrorMessages((prev) => ({
+            ...prev,
+            general:
+              "Произошла ошибка при регистрации. Пожалуйста, попробуйте позже.",
+          }));
+        }
+      } catch (parseError) {
+        console.error("Ошибка при парсинге ошибки:", parseError);
         setErrorMessages((prev) => ({
           ...prev,
-          phone: `Пользователь с номером ${formValues.phone} уже существует`,
-        }));
-      } else {
-        setErrorMessages((prev) => ({
-          ...prev,
-          general: "Ошибка регистрации. Попробуйте позже.",
+          general: error.message || "Неизвестная ошибка при регистрации",
         }));
       }
     } finally {

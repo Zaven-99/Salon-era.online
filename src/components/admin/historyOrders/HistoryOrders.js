@@ -1,9 +1,8 @@
 import React from "react";
-import DatePicker, { registerLocale } from "react-datepicker";
+import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import RecordList from "./recordList/RecordList";
 import { HistoryOrdersState } from "../../hooks/historyOrders/historyOrdersState";
-// import { ru } from "date-fns/locale";
 import GenericSkeleton from "../../../utils/Skeleton";
 import styles from "./historyOrders.module.scss";
 

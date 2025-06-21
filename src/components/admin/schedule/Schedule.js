@@ -39,14 +39,15 @@ const Schedule = () => {
     setMessage,
     loading,
     handleUpdate,
+    setLoading,
   } = ScheduleState();
 
   const daysOfWeek = getDaysOfWeek(currentDate);
 
-  // Если идет загрузка
-  if (loading) {
-    return <Spinner />;
-  }
+ 
+  // if (loading) {
+  //   return <Spinner />;
+  // }
 
   return (
     <div className={styles.schedule}>
@@ -75,6 +76,7 @@ const Schedule = () => {
           selectedCells={selectedCells}
           daysOfWeek={daysOfWeek}
           loading={loading}
+          setLoading={setLoading}
         />
       </div>
 

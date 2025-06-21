@@ -1,11 +1,11 @@
 import HeaderAdminPanel from "../../components/admin/headerAdminPanel/HeaderAdminPanel";
 
-const AdminPanelLayout = ({ children }) => {
+const AdminPanelLayout = ({ children}) => {
 
   
   return (
     <div>
-      <HeaderAdminPanel />
+      <HeaderAdminPanel  />
       <main>{children}</main>
     </div>
   );

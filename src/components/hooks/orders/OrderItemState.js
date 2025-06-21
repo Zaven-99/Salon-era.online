@@ -165,17 +165,19 @@ export const OrderItemState = ({ setOrders, setError }) => {
   );
 
   const closeOrder = useCallback(
-    (order) => {
-      updateOrderStatus(order, 500);
-      dispatch(removeOrder(order.record.id));  
+    async (order) => {
+      await updateOrderStatus(order, 500);
+      dispatch(removeOrder(order.record.id));
+      setOrders((prev) => prev.filter((o) => o.record.id !== order.record.id));
     },
     [updateOrderStatus, dispatch]
   );
 
   const cancelOrder = useCallback(
-    (order) => {
-      updateOrderStatus(order, 400);
-      dispatch(removeOrder(order.record.id)); 
+    async (order) => {
+      await updateOrderStatus(order, 400);
+      dispatch(removeOrder(order.record.id));
+      setOrders((prev) => prev.filter((o) => o.record.id !== order.record.id));
     },
     [updateOrderStatus, dispatch]
   );

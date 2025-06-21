@@ -1,6 +1,7 @@
 import React from "react";
 
 import styles from "./table.module.scss";
+import load from "../../../../img/icons/Loading_icon.gif";
 
 const Table = ({
   setSelectedCell,
@@ -11,8 +12,11 @@ const Table = ({
   selectedCells,
   daysOfWeek,
   employee,
+  loading,
+  setLoading,
 }) => {
   const handleCellClick = (employeeIndex, dayIndex, employeeId, date) => {
+    setLoading(true)
     const cellKey = `${employeeId}-${dayIndex}`;
     const existingCellData = selectedCells[cellKey]; // Проверка, есть ли данные в ячейке
 
@@ -28,11 +32,17 @@ const Table = ({
     }
 
     setMessage(true); // Показываем модальное окно
+    setLoading(false);
   };
 
   const formatTimeToDisplay = (str) => {
     return str.slice(-5);
   };
+
+  // if (loading) {
+  //   return <Spinner />;
+  // }
+
   return (
     <table>
       <thead>
@@ -63,11 +73,17 @@ const Table = ({
                     handleCellClick(index, dayIndex, item.id, dayObj.date)
                   }
                 >
-                  {cellData
-                    ? `${formatTimeToDisplay(
-                        cellData.startTime
-                      )} - ${formatTimeToDisplay(cellData.endTime)}`
-                    : ""}
+                  {loading ? (
+                    <div>
+                      <img className={styles.loading} src={load} alt="" />
+                    </div>
+                  ) : cellData ? (
+                    `${formatTimeToDisplay(
+                      cellData.startTime
+                    )} - ${formatTimeToDisplay(cellData.endTime)}`
+                  ) : (
+                    ""
+                  )}
                 </td>
               );
             })}

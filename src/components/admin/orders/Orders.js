@@ -25,6 +25,7 @@ const Orders = ({
   formatDate,
   setError,
   groupedOrders,
+  
 }) => {
   if (loading) {
     return (
