@@ -16,7 +16,7 @@ const Table = ({
   setLoading,
 }) => {
   const handleCellClick = (employeeIndex, dayIndex, employeeId, date) => {
-    setLoading(true)
+    setLoading(true);
     const cellKey = `${employeeId}-${dayIndex}`;
     const existingCellData = selectedCells[cellKey]; // Проверка, есть ли данные в ячейке
 
@@ -38,10 +38,6 @@ const Table = ({
   const formatTimeToDisplay = (str) => {
     return str.slice(-5);
   };
-
-  // if (loading) {
-  //   return <Spinner />;
-  // }
 
   return (
     <table>

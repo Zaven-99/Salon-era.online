@@ -1,19 +1,19 @@
 @import '../../../styles/variables.scss';
 .works{
-  display: flex;
-  justify-content: center;
-  margin-bottom: 20px
+  margin: 30px 0 30px 0;
+  margin-left: 10px;
 }
  .work-list{
   height: 100vh;
-  
  }
-
+.category{
+  margin-left: 10px;
+}
 .work-list__inner {
-   display: flex;
-    gap: 15px;
-    margin-top: 20px;
-    flex-wrap: wrap;
+  display: flex;
+  gap: $sp-15;
+  margin-top: $sp-20;
+  flex-wrap: wrap;
 }
 
 .work-list__item {
@@ -24,6 +24,7 @@
   cursor: pointer;
   object-fit: cover;
   width: 200px;
+  margin: $sp-10;
 }
 .work-list__item:hover{
     box-shadow: 0 1px 4px -2px;
@@ -41,8 +42,8 @@
 	font-family: "Open Sans", sans-serif;
 	color: salmon;
 	margin-top: $sp-50;
-    font-size: $fz-20;
-    font-weight: $font-weight-medium;
+  font-size: $fz-20;
+  font-weight: $font-weight-medium;
 }
 .question{
   text-align: center;

@@ -36,9 +36,9 @@ export const WorkListState = (setWorks) => {
       });
       if (!response.ok) throw new Error("Ошибка при получении данных");
       const data = await response.json();
-      setWorks(data);
-
+      
       const filteredData = data.filter((work) => work.category !== "8");
+      setWorks(filteredData);
 
       const grouped = filteredData.reduce((acc, work) => {
         const category = work.category;
@@ -164,6 +164,14 @@ export const WorkListState = (setWorks) => {
     );
     return category ? category.value : "Неизвестная категория";
   };
+
+  useEffect(() => {
+    if (editedWorks?.image_link) {
+      setImagePreview(editedWorks.image_link);
+    } else {
+      setImagePreview(null);
+    }
+  }, [editedWorks]);
 
   return {
     worksId,

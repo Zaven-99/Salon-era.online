@@ -1,19 +1,20 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import CryptoJS from "crypto-js";
 
 export const HistoryOrdersState = () => {
   const [orders, setOrders] = useState([]);
-  const [loading, setLoading] = useState(true);
+  const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
   const [selectedDate, setSelectedDate] = useState(null);
   const [page, setPage] = useState(1);
   const [totalPages, setTotalPages] = useState(1);
-  const [hasNextPage, setHasNextPage] = useState(true);
+  const [hasNextPage, setHasNextPage] = useState(false);
+  const [totalCount, setTotalCount] = useState(0);
+
   const pageSize = 10;
   const base64Key = "ECqDTm9UnVoFn2BD4vM2/Fgzda1470BvZo4t1PWAkuU=";
   const key = CryptoJS.enc.Base64.parse(base64Key);
 
-  // Функция дешифровки поля
   const decryptField = (encryptedValue) => {
     try {
       const decrypted = CryptoJS.AES.decrypt(encryptedValue, key, {
@@ -27,7 +28,6 @@ export const HistoryOrdersState = () => {
     }
   };
 
-  // Функция дешифровки заказа
   const decryptOrder = (order) => {
     const decryptedOrder = { ...order };
 
@@ -50,78 +50,96 @@ export const HistoryOrdersState = () => {
     return decryptedOrder;
   };
 
-  useEffect(() => {
-    const fetchData = async () => {
-      setLoading(true);
-      setError(null);
+  const formatForApi = (date) => {
+    if (!(date instanceof Date)) return "";
+    const year = date.getFullYear();
+    const month = String(date.getMonth() + 1).padStart(2, "0");
+    const day = String(date.getDate()).padStart(2, "0");
+    const hours = String(date.getHours()).padStart(2, "0");
+    const minutes = String(date.getMinutes()).padStart(2, "0");
+    return `${year}-${month}-${day}T${hours}:${minutes}`;
+  };
 
-      try {
-        const response = await fetch(
-          `https://api.salon-era.ru/records/all?page=${page}`,
-          {
-            method: "GET",
-            headers: { "Content-Type": "application/json" },
-            credentials: "include",
-          }
-        );
+  const fetchData = async (pageToLoad = 1) => {
+    if (!selectedDate) {
+      setError("Выберите дату");
+      return;
+    }
 
-        if (!response.ok) {
-          throw new Error(`HTTP error! status: ${response.status}`);
+    setLoading(true);
+    setError(null);
+
+    try {
+      const response = await fetch(
+        `https://api.salon-era.ru/records/all/filter?field=date_record&state=ge&value=${formatForApi(
+          selectedDate
+        )}&page=${pageToLoad}`,
+        {
+          method: "GET",
+          headers: { "Content-Type": "application/json" },
+          credentials: "include",
         }
+      );
 
-        const data = await response.json();
-
-        const decryptedData = data.records
-          ? data.records.map(decryptOrder)
-          : data.map(decryptOrder);
-
-        decryptedData.sort(
-          (a, b) =>
-            new Date(b.record.date_record) - new Date(a.record.date_record)
-        );
-
-        setOrders(decryptedData);
-
-        if (data.totalPages) {
-          setTotalPages(data.totalPages);
-          setHasNextPage(page < data.totalPages);
-        } else {
-          setHasNextPage(decryptedData.length === pageSize);
-          setTotalPages(1); // Если totalPages нет, оставляем 1
-        }
-      } catch (error) {
-        setError(error.message);
-        setOrders([]);
-        setHasNextPage(false);
-        setTotalPages(1);
-      } finally {
-        setLoading(false);
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`);
       }
-    };
 
-    fetchData();
-  }, [page]);
+      // Получаем общее количество заказов из заголовка
+      const totalCountHeader = response.headers.get("Size");
+      const total = totalCountHeader ? parseInt(totalCountHeader, 10) : 0;
+      setTotalCount(total);
 
-  // Переход на следующую страницу
-  const nextPage = () => {
-    if (hasNextPage) {
-      setPage((prev) => prev + 1);
+      // Рассчитываем количество страниц
+      const calculatedTotalPages = Math.ceil(total / pageSize) || 1;
+      setTotalPages(calculatedTotalPages);
+
+      // Устанавливаем, есть ли следующая страница
+      // Есть, если текущая страница меньше totalPages
+      setHasNextPage(pageToLoad < calculatedTotalPages);
+
+      const data = await response.json();
+
+      const decryptedData = data.records
+        ? data.records.map(decryptOrder)
+        : data.map(decryptOrder);
+
+      decryptedData.sort(
+        (a, b) =>
+          new Date(b.record.date_record) - new Date(a.record.date_record)
+      );
+
+      setOrders(decryptedData);
+      setPage(pageToLoad);
+    } catch (error) {
+      setError(error.message);
+      setOrders([]);
+      setHasNextPage(false);
+      setTotalPages(1);
+      setTotalCount(0);
+    } finally {
+      setLoading(false);
     }
   };
 
-  // Переход на предыдущую страницу
-  const prevPage = () => {
-    setPage((prev) => (prev > 1 ? prev - 1 : prev));
+  const nextPage = () => {
+    if (page < totalPages) {
+      fetchData(page + 1);
+    }
   };
 
-  // Переход на конкретную страницу
+  const prevPage = () => {
+    if (page > 1) {
+      fetchData(page - 1);
+    }
+  };
+
   const goToPage = (pageNumber) => {
     if (pageNumber >= 1 && pageNumber <= totalPages) {
-      setPage(pageNumber);
+      fetchData(pageNumber);
     }
   };
 
-  // Форматирование даты в удобочитаемый вид
   const formatDate = (date) => {
     const options = {
       year: "numeric",
@@ -134,27 +152,18 @@ export const HistoryOrdersState = () => {
     return new Date(date).toLocaleString("ru-RU", options);
   };
 
-  // Фильтрация заказов по выбранной дате (если она есть)
-  const filteredOrders =
-    selectedDate && selectedDate instanceof Date
-      ? orders.filter((order) => {
-          const orderDate = new Date(order.record.date_record);
-          return orderDate.toDateString() === selectedDate.toDateString();
-        })
-      : orders;
-
-  // Подсчет общей суммы по фильтрованным заказам, кроме со статусом 400
   const calculateTotal = () => {
-    return filteredOrders
+    return orders
       .filter((o) => o.record?.status !== 400)
       .reduce((acc, curr) => acc + (curr.record?.price || 0), 0);
   };
 
   return {
-    orders: filteredOrders,
+    orders,
     loading,
     error,
     total: calculateTotal(),
+    totalCount,
     selectedDate,
     setSelectedDate,
     formatDate,
@@ -164,5 +173,6 @@ export const HistoryOrdersState = () => {
     currentPage: page,
     totalPages,
     hasNextPage,
+    fetchData,
   };
 };

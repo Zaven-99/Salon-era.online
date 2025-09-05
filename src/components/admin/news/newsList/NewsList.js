@@ -8,7 +8,13 @@ import GenericSkeleton from "../../../../utils/Skeleton";
 
 import styles from "./newsList.module.scss";
 
-const NewsList = ({ news, setNews, toggleOpen, toggleClose }) => {
+const NewsList = ({
+  news,
+  setNews,
+  toggleOpen,
+  toggleClose,
+ 
+}) => {
   const {
     newsId,
     setNewsId,

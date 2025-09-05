@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { useForm } from "react-hook-form";
@@ -131,7 +131,6 @@ export const SignInFormState = () => {
         email: data.email,
         gender: data.gender,
         image_link: data.image_link,
-        token: true,
         role: "ADMIN",
       };
 

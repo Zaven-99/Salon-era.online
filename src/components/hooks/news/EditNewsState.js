@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState,useEffect } from "react";
 import { compressAndPreviewImage } from "../../../utils/uploadImage";
 
 export const EditNewsState = ({
@@ -6,7 +6,6 @@ export const EditNewsState = ({
   setEditedNews,
   setNews,
   setNewsId,
-
 }) => {
   const [activeInput, setActiveInput] = useState("");
   const [newsToDelete, setNewsToDelete] = useState(null);
@@ -97,6 +96,14 @@ export const EditNewsState = ({
   const deletImagePreview = () => {
     setImagePreview(null);
   };
+
+  useEffect(() => {
+    if (editedNews?.image_link) {
+      setImagePreview(editedNews.image_link);
+    } else {
+      setImagePreview(null);
+    }
+  }, [editedNews]);
 
   return {
     activeInput,

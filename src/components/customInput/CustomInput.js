@@ -133,7 +133,7 @@ const CustomInput = React.forwardRef(
         )}
         {type === "radio" && (
           <div className={styles["gender-block"]}>
-            {error && <p className={styles["error-gender"]}>{error.message}</p>}
+            {error && <p className={styles["error-gender"]}>{error}</p>}
             <p className={styles["gender"]}>Пол</p>
             <label
               className={
@@ -144,6 +144,7 @@ const CustomInput = React.forwardRef(
                 type="radio"
                 name={name}
                 value="0"
+                checked={value === "0" || value === 0  }
                 onChange={handleChange || handleInputChange}
                 ref={inputRef}
               />
@@ -158,6 +159,7 @@ const CustomInput = React.forwardRef(
                 type="radio"
                 name={name}
                 value="1"
+                checked={ value === "1" || value === 1 }
                 onChange={handleChange || handleInputChange}
                 ref={inputRef}
               />

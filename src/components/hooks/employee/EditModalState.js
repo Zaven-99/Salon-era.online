@@ -140,6 +140,14 @@ export const EditModalState = ({
     }
   };
 
+  useEffect(() => {
+    if (editedEmployee?.image_link) {
+      setImagePreview(editedEmployee.image_link);
+    } else {
+      setImagePreview(null);
+    }
+  }, [editedEmployee]);
+
   return {
     register,
     control,

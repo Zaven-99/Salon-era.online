@@ -48,6 +48,3 @@ export const compressAndPreviewImage = async (
     setLoading(false); // Прячем спиннер после завершения сжатия
   }
 };
-
-
- 

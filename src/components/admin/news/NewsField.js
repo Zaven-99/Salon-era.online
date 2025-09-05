@@ -28,6 +28,7 @@ const News = () => {
     uploadImage,
     formSubmitHandler,
     loading,
+  
   } = NewsFieldState();
 
   if (loading) {
@@ -106,6 +107,7 @@ const News = () => {
         setNews={setNews}
         toggleOpen={toggleOpen}
         toggleClose={toggleClose}
+  
       />
     </div>
   );

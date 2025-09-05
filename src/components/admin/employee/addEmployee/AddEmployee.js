@@ -281,12 +281,19 @@ const AddEmployee = ({
         ))}
       </div>
 
-      <CustomInput
-        label="Пол"
-        type="radio"
+      <Controller
         name="gender"
         control={control}
-        {...register("gender", { required: "Выберите пол." })}
+        rules={{ required: "Выберите пол." }}
+        render={({ field, fieldState }) => (
+          <CustomInput
+            label="Пол"
+            type="radio"
+            name="gender"
+            {...field}
+            error={fieldState.error?.message}
+          />
+        )}
       />
       <CustomButton
         className={styles["b-btn"]}

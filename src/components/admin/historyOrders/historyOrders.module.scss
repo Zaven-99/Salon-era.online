@@ -5,7 +5,31 @@
   text-align: center;
   margin-top: 15px;
 }
+
+.get-orders_block{
+    display: flex;
+    align-items: center;
+    flex-wrap:wrap ;
+    gap: 15px;
+}
+ .get-orders{
+    margin-left: 20px;
+    background-color: #00aaff;
+    color: white;
+    border: none;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+    width: max-content;
+    text-align: center;
+    padding: 4px 10px;
+    border-radius: 5px;
+    font-size: 16px;
  
+ }
+ .get-orders:hover{
+    transform: scale(1.02);
+    box-shadow: 0 8px 16px -8px;
+ }
 @keyframes bounce-in {
     0%{
         opacity: 0; 
@@ -37,14 +61,7 @@
   border: $br-1 solid;
   padding: $sp-2;
 }
-.message{
-  text-align: center;
-	color: salmon;
-	font-family: "Open Sans", sans-serif;
-	margin-top: $sp-50;
-  font-size: $fz-20;
-  font-weight: $font-weight-medium;
-}
+
  
 .wrapper{
   display: flex;
@@ -67,8 +84,8 @@
     flex-wrap: wrap;
   }
   .record-item{
-        display: block;
-        width: $wd-300;
+      display: block;
+      width: $wd-300;
      }
      li div {
         font-size: $fz-20;
@@ -81,8 +98,9 @@
       margin-top:$sp-15;
       width: $wd-100p;
      }
-     .datePicker{
-       margin-top: $sp-15;
+     .dataPicker{
+       
+       margin-left: $sp-20;
     }
 }
 @media(max-width:650px){
@@ -93,28 +111,28 @@
 
 }
 
-@media(max-width:520px){
-  .total{
-    margin-right: $sp-20;
-    
-  }
-  .dataPicker{
-    margin-left: $sp-20;
-  }
-  .history-orders{
-    font-size: $fz-20;
-  }
-   
-}
 
-@media(max-width:520px){
+
+@media(max-width:720px){
 .datePickerWrapper{
   display: block;
   text-align: center;
 
 }
 .total{
-  margin-top: 10px;
+  margin-top: $sp-10;
+  text-align: start;
+  margin-left: $sp-20;
 }
 
+}
+
+@media(max-width:520px){
+   
+   
+  .history-orders{
+    font-size: $fz-20;
+  }
+  
+   
 }

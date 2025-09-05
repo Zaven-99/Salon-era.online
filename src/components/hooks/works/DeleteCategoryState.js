@@ -25,7 +25,7 @@ export const DeleteCategoryState = () => {
       );
       setCategory(filteredCategory);
     } catch (error) {
-      console.log("error", error);
+      console.log(error);
     }
   };
 

@@ -91,3 +91,9 @@
      
  }
  
+@media(max-width:410px){
+  .btn-block{
+    flex-wrap: wrap;
+    gap: 0;
+  }
+}

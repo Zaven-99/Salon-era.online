@@ -2,7 +2,7 @@ import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { compressAndPreviewImage } from "../../../utils/uploadImage";
 
-export const AddWorkState = (categories, setWorks, toggleClose) => {
+export const AddWorkState = ( setWorks, toggleClose) => {
   const { handleSubmit, control, reset } = useForm({
     mode: "onChange",
     defaultValues: {

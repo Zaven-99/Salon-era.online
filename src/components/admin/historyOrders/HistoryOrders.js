@@ -5,6 +5,7 @@ import RecordList from "./recordList/RecordList";
 import { HistoryOrdersState } from "../../hooks/historyOrders/historyOrdersState";
 import GenericSkeleton from "../../../utils/Skeleton";
 import styles from "./historyOrders.module.scss";
+import CustomButton from "../../customButton/CustomButton";
 
 const HistoryOrders = () => {
   const {
@@ -19,7 +20,12 @@ const HistoryOrders = () => {
     goToPage,
     currentPage,
     totalPages,
+    fetchData,
   } = HistoryOrdersState();
+
+  const handleLoadClick = () => {
+    fetchData();
+  };
 
   if (loading) {
     return (
@@ -36,17 +42,25 @@ const HistoryOrders = () => {
   return (
     <div>
       <h1 className={styles["history-orders"]}>История Заказов</h1>
-      {orders.length === 0 ? <p className={styles.message}>Заказов нет</p> : ""}
+      
       <div className={styles.datePickerWrapper}>
-        <DatePicker
-          className={styles.dataPicker}
-          selected={selectedDate}
-          onChange={(date) => setSelectedDate(date)}
-          dateFormat="dd MMM yyyy"
-          placeholderText="Выберите дату"
-          isClearable
-          locale="ru"
-        />
+        <div className={styles["get-orders_block"]}>
+          <DatePicker
+            className={styles.dataPicker}
+            selected={selectedDate}
+            onChange={(date) => setSelectedDate(date)}
+            dateFormat="dd MMM yyyy"
+            placeholderText="Выберите дату"
+            isClearable
+            locale="ru"
+          />
+          <CustomButton
+            className={styles["get-orders"]}
+            label="Загрузить заказы"
+            onClick={handleLoadClick}
+          />
+        </div>
+
         <h2 className={styles.total}>Общая сумма: {total || 0}р.</h2>
       </div>
 
@@ -58,6 +72,7 @@ const HistoryOrders = () => {
         goToPage={goToPage}
         currentPage={currentPage}
         totalPages={totalPages}
+        loading={loading}
       />
     </div>
   );

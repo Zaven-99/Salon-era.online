@@ -10,9 +10,12 @@ const RecordList = ({
   prevPage,
   goToPage,
   currentPage,
+  totalPages,
+  loading,
 }) => {
   return (
     <div>
+      {orders.length === 0 ? <p className={styles.message}>Заказов нет</p> : ""}
       <ul className={styles["record-list"]}>
         {orders.map((order) => (
           <li key={order.record.id} className={styles["record-item"]}>
@@ -49,8 +52,8 @@ const RecordList = ({
               <div>
                 {order.record?.price
                   ? `${order.record.price}р.`
-                  : order.service?.priceLow
-                  ? `${order.service.priceLow}р.`
+                  : order.service?.price_low
+                  ? `${order.service.price_low}р.`
                   : "цена недоступна"}
               </div>
             </div>
@@ -76,38 +79,47 @@ const RecordList = ({
         ))}
       </ul>
 
-      <div className={styles.pagination}>
-        <CustomButton
-          label="В начало"
-          className={styles["pagination-btn"]}
-          onClick={() => goToPage(1)}
-          disabled={currentPage === 1}
-        />
-        <CustomButton
-          label="Предыдущая"
-          className={styles["pagination-btn"]}
-          onClick={prevPage}
-          disabled={currentPage === 1}
-        />
+      {orders.length > 0 && (
+        <div className={styles.pagination}>
+          <CustomButton
+            label="В начало"
+            className={styles["pagination-btn"]}
+            onClick={() => goToPage(1)}
+            disabled={currentPage === 1}
+          />
+          <CustomButton
+            label="Предыдущая"
+            className={styles["pagination-btn"]}
+            onClick={prevPage}
+            disabled={currentPage === 1}
+          />
 
-        <CustomButton
-          label={currentPage}
-          className={`${styles["pagination-btn"]} ${
-            currentPage ? styles["active"] : ""
-          }`}
-        />
-        <CustomButton
-          label="Следующая"
-          className={styles["pagination-btn"]}
-          onClick={nextPage}
-          disabled={orders.length < 10}
-        />
-      </div>
+          {[...Array(totalPages)].map((_, idx) => {
+            const pageNum = idx + 1;
+            return (
+              <CustomButton
+                key={pageNum}
+                label={String(pageNum)}
+                onClick={() => goToPage(pageNum)}
+                disabled={loading || currentPage === pageNum}
+                className={
+                  currentPage === pageNum
+                    ? styles.active
+                    : styles["pagination-btn"]
+                }
+              />
+            );
+          })}
+          <CustomButton
+            label="Следующая"
+            className={styles["pagination-btn"]}
+            onClick={nextPage}
+            disabled={orders.length < 10}
+          />
+        </div>
+      )}
     </div>
   );
 };
 
 export default RecordList;
-
-
- 

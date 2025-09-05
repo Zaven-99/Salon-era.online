@@ -119,7 +119,6 @@ export const HeaderSlidesListState = (setSlides) => {
   const uploadImage = async (event) => {
     const result = await compressAndPreviewImage(event, {}, setLoading);
     if (result) {
-  
       setSelectedFile(result.compressedFile);
       setImagePreview(result.dataUrl);
     }
@@ -129,6 +128,14 @@ export const HeaderSlidesListState = (setSlides) => {
     const { name, value } = e.target;
     setEditedSlides((prev) => ({ ...prev, [name]: value }));
   };
+
+  useEffect(() => {
+    if (editedSlides?.image_link) {
+      setImagePreview(editedSlides.image_link);
+    } else {
+      setImagePreview(null);
+    }
+  }, [editedSlides]);
 
   return {
     slidesId,

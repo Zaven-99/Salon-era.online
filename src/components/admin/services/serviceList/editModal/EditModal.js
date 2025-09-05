@@ -51,10 +51,10 @@ const EditModal = ({
 
       <CustomInput
         label="Минимальная цена услуги:"
-        error={errors.priceLow}
+        error={errors.price_low}
         type="number"
         name="priceLow"
-        value={editedService.priceLow}
+        value={editedService.price_low}
         handleChange={handleChange}
         isActive={activeInput === "priceLow"}
         setActiveInput={setActiveInput}
@@ -64,8 +64,8 @@ const EditModal = ({
         label="Максимальная цена услуги:"
         name="priceMax"
         type="number"
-        error={errors.priceMax}
-        value={editedService.priceMax}
+        error={errors.price_max}
+        value={editedService.price_max}
         isActive={activeInput === "priceMax"}
         setActiveInput={setActiveInput}
         handleChange={handleChange}

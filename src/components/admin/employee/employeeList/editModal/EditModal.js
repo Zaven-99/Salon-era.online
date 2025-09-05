@@ -199,6 +199,7 @@ const EditModal = ({
       <ImagePreview
         deletImagePreview={deletImagePreview}
         imagePreview={imagePreview}
+       
       />
       <UploadImage onChange={uploadImage} />
       <h5 className={styles["choose-category"]}>

@@ -48,13 +48,15 @@ export const NewsListState = (setNews) => {
     };
 
     const localDate = new Date(date);
-    localDate.setHours(localDate.getHours() + 3); // прибавляем +3 часа
+    localDate.setHours(localDate.getHours() + 3);
 
     const formattedDate = localDate.toLocaleDateString("ru-RU", dateOptions);
     const formattedTime = localDate.toLocaleTimeString("ru-RU", timeOptions);
 
     return `${formattedDate}, ${formattedTime}`;
   };
+
+  
 
   return {
     newsId,

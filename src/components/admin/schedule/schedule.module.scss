@@ -126,20 +126,21 @@ td {
 }
 
 .modal-title {
-  font-size: 20px;
+  font-size: $sp-20;
   font-weight: bold;
-  margin-bottom: 15px;
+  margin-bottom: $sp-15;
   text-align: center;
+  margin-top: $sp-30;
 }
 
 .work-time-block {
-  margin-bottom: 15px;
+  margin-bottom: $sp-15;
 }
 
 .label {
   display: block;
-  font-size: 16px;
-  margin-bottom: 5px;
+  font-size: $fz-16;
+  margin-bottom: $sp-5;
   font-weight: 500;
 }
 
@@ -166,4 +167,15 @@ td {
 
   }
    
+}
+@media(max-width:530px){
+   .g-btn{
+      width: 100px;
+   }
+   .r-btn{
+    width: 100px;
+ }
+ .modal-title{
+  font-size: $fz-15;
+ }
 }

@@ -44,6 +44,8 @@ select{
     display: flex;
     align-items:center;
     justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 15px;
 }
 .b-btn{
     position: relative;
@@ -55,10 +57,10 @@ select{
     transition: background-color 0.3s ease;
     width: max-content;
     text-align: center;
-    padding: 10px 20px;
+    padding: 3px 20px;
     border-radius: 5px;
     font-size: 16px;
-    margin-top: 10px;
+ 
 }
 .b-btn:hover{
   transform: scale(1.02);
@@ -156,14 +158,18 @@ select{
      .order-accept{
         width:auto;;
      }
-     .date-picker{
-       margin-top: $sp-15;
-    }
+      
 }
  
 
  @media(max-width:520px){
   .orders-today{
     font-size: $fz-20;
+  }
+}
+
+@media(max-width:384px){
+  .b-btn{
+    margin-left: 30px;
   }
 }

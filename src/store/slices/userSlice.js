@@ -48,6 +48,7 @@ const userSlice = createSlice({
         "email",
         "phone",
         "role",
+       
       ];
       const decryptedUser = {};
 

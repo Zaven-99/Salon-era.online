@@ -147,7 +147,17 @@ export const OrderItemState = ({ setOrders, setError }) => {
         if (!updated) throw new Error("Не удалось загрузить обновлённый заказ");
 
         setOrders((prev) =>
-          prev.map((o) => (o.record.id === updated.record.id ? updated : o))
+          prev.map((o) =>
+            o.record.id === orderId
+              ? {
+                  ...o,
+                  record: {
+                    ...o.record,
+                    price: Number(price),
+                  },
+                }
+              : o
+          )
         );
       } catch (error) {
         setError(error.message || "Ошибка при обновлении цены");

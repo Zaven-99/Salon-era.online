@@ -114,7 +114,7 @@ const OrderItem = ({
                     <strong>Длительность:</strong>
                     <div>{durationToText(order.service?.duration)}</div>
                   </div>
-                  <div className={styles["record-item__inner"]}>
+                  <div className={styles["record-item__status"]}>
                     <strong>Статус:</strong>
                     {order.record?.status === 0 ? (
                       <div className={styles["order-created"]}>

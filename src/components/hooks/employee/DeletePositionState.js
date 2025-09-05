@@ -24,7 +24,7 @@ export const DeletePositionState = (toggleClose) => {
       }
 
       const data = await response.json();
-      console.log(data)
+  
       setPosition(data);
     } catch (e) {
       console.error("Ошибка загрузки должностей:", e);

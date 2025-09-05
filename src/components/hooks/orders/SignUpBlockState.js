@@ -106,7 +106,7 @@ export const SignUpBlockState = ({
         const errorDetails = error.responseData;
 
         const errorCode = errorDetails?.errorCode;
-        console.log(errorCode)
+  
         if (errorCode === "206") {
           setErrorMessages((prev) => ({
             ...prev,

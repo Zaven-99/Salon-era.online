@@ -54,13 +54,15 @@ const WorkList = ({ setWorks, categories, toggleOpen, toggleClose, works }) => {
     return <p className={styles.message}>Список работ пуст.</p>;
   }
 
+ 
+
   return (
     <div className={styles["work-list"]}>
       <h1 className={styles.works}>Работы</h1>
       {Object.entries(groupedWorks).map(
         ([categoryId, worksInCategory], index) => (
           <div className={styles.wrapper} key={index}>
-            <h3>{getCategoryName(categoryId)}</h3>
+            <h3 className={styles.category}>{getCategoryName(categoryId)}</h3>
             <ul className={styles["work-list__inner"]}>
               {worksInCategory.map((work, index) => (
                 <li

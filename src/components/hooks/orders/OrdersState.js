@@ -218,9 +218,7 @@ export const useOrdersState = () => {
         if (isUnmounted.current) return;
         reconnectAttempts.current++;
         const timeout = Math.min(30000, 5000 * 2 ** reconnectAttempts.current);
-        console.log(
-          `WebSocket закрыт, переподключение через ${timeout / 1000} секунд`
-        );
+         
         reconnectTimeout.current = setTimeout(connect, timeout);
       };
     };

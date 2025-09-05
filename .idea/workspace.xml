@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ChangeListManager">
+    <list default="true" id="0ae17376-1028-4a25-9a11-fb54c2c447f0" name="Changes" comment="">
+      <change beforePath="$PROJECT_DIR$/package-lock.json" beforeDir="false" afterPath="$PROJECT_DIR$/package-lock.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/package.json" beforeDir="false" afterPath="$PROJECT_DIR$/package.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/admin/employee/addEmployee/AddEmployee.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/admin/employee/addEmployee/AddEmployee.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/admin/employee/addEmployee/addEmployee.module.scss" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/admin/employee/addEmployee/addEmployee.module.scss" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/admin/employee/employeeList/editModal/EditModal.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/admin/employee/employeeList/editModal/EditModal.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/admin/employee/employeeList/employeeList.module.scss" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/admin/employee/employeeList/employeeList.module.scss" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/admin/headerSlides/headerSlidesList/headerSlidesList.module.scss" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/admin/headerSlides/headerSlidesList/headerSlidesList.module.scss" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/admin/historyOrders/HistoryOrders.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/admin/historyOrders/HistoryOrders.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/admin/historyOrders/historyOrders.module.scss" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/admin/historyOrders/historyOrders.module.scss" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/admin/historyOrders/recordList/RecordList.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/admin/historyOrders/recordList/RecordList.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/admin/historyOrders/recordList/recordList.module.scss" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/admin/historyOrders/recordList/recordList.module.scss" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/admin/news/NewsField.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/admin/news/NewsField.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/admin/news/newsList/NewsList.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/admin/news/newsList/NewsList.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/admin/news/newsList/newsList.module.scss" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/admin/news/newsList/newsList.module.scss" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/admin/orders/order.module.scss" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/admin/orders/order.module.scss" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/admin/orders/orderItem/OrderItem.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/admin/orders/orderItem/OrderItem.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/admin/orders/orderItem/orderItem.module.scss" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/admin/orders/orderItem/orderItem.module.scss" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/admin/schedule/schedule.module.scss" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/admin/schedule/schedule.module.scss" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/admin/schedule/table/Table.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/admin/schedule/table/Table.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/admin/schedule/table/table.module.scss" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/admin/schedule/table/table.module.scss" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/admin/services/addService/AddService.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/admin/services/addService/AddService.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/admin/services/addService/addService.module.scss" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/admin/services/addService/addService.module.scss" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/admin/services/filterBlock/filterBlock.module.scss" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/admin/services/filterBlock/filterBlock.module.scss" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/admin/services/serviceList/editModal/EditModal.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/admin/services/serviceList/editModal/EditModal.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/admin/services/serviceList/servicesList.module.scss" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/admin/services/serviceList/servicesList.module.scss" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/admin/works/workList/WorkList.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/admin/works/workList/WorkList.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/admin/works/workList/workList.module.scss" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/admin/works/workList/workList.module.scss" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/customInput/CustomInput.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/customInput/CustomInput.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/customInput/customInput.module.scss" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/customInput/customInput.module.scss" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/hooks/employee/AddPositionState.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/hooks/employee/AddPositionState.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/hooks/employee/DeletePositionState.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/hooks/employee/DeletePositionState.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/hooks/employee/EditModalState.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/hooks/employee/EditModalState.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/hooks/headerSlides/HeaderSlidesListState.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/hooks/headerSlides/HeaderSlidesListState.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/hooks/historyOrders/historyOrdersState.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/hooks/historyOrders/historyOrdersState.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/hooks/news/EditNewsState.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/hooks/news/EditNewsState.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/hooks/news/NewsListState.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/hooks/news/NewsListState.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/hooks/orders/OrderItemState.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/hooks/orders/OrderItemState.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/hooks/orders/OrdersState.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/hooks/orders/OrdersState.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/hooks/orders/SignUpBlockState.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/hooks/orders/SignUpBlockState.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/hooks/signInForm/SignInFormState.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/hooks/signInForm/SignInFormState.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/hooks/works/AddWorkState.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/hooks/works/AddWorkState.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/hooks/works/DeleteCategoryState.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/hooks/works/DeleteCategoryState.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/hooks/works/WorkListState.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/hooks/works/WorkListState.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/hooks/works/WorksFieldState.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/hooks/works/WorksFieldState.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/img/icons/Loading_icon.gif" beforeDir="false" afterPath="$PROJECT_DIR$/src/img/icons/Loading_icon.gif" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/store/slices/userSlice.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/store/slices/userSlice.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/utils/uploadImage.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/utils/uploadImage.js" afterDir="false" />
+    </list>
+    <option name="SHOW_DIALOG" value="false" />
+    <option name="HIGHLIGHT_CONFLICTS" value="true" />
+    <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
+    <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="Git.Settings">
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
+  </component>
+  <component name="ProjectColorInfo"><![CDATA[{
+  "associatedIndex": 0
+}]]></component>
+  <component name="ProjectId" id="32HHXF5wt1qlFZPxjqSvqzEcA4t" />
+  <component name="ProjectViewState">
+    <option name="hideEmptyMiddlePackages" value="true" />
+    <option name="showLibraryContents" value="true" />
+  </component>
+  <component name="PropertiesComponent"><![CDATA[{
+  "keyToString": {
+    "ModuleVcsDetector.initialDetectionPerformed": "true",
+    "RunOnceActivity.ShowReadmeOnStart": "true",
+    "git-widget-placeholder": "main"
+  }
+}]]></component>
+  <component name="TaskManager">
+    <task active="true" id="Default" summary="Default task">
+      <changelist id="0ae17376-1028-4a25-9a11-fb54c2c447f0" name="Changes" comment="" />
+      <created>1757070615119</created>
+      <option name="number" value="Default" />
+      <option name="presentableId" value="Default" />
+      <updated>1757070615119</updated>
+    </task>
+    <servers />
+  </component>
+</project>

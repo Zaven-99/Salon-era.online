@@ -21,7 +21,6 @@ export const WorksFieldState = () => {
       }
 
       const data = await response.json();
-
       setCategories(data);
     } catch {
       console.log("error");

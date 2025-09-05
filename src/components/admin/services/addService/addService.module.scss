@@ -75,3 +75,11 @@
     justify-content: space-between;
     gap: 10px;
  }
+
+
+ @media(max-width:410px){
+    .btn-block{
+      flex-wrap: wrap;
+      gap: 0;
+    }
+}
